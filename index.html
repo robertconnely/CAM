@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Zelis Product Operating System</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .filters {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      margin-bottom: 2rem;
+    }
+
+    .filter-btn {
+      background: var(--zelis-blue-purple);
+      color: var(--zelis-white);
+      border: 2px solid transparent;
+      padding: 0.6rem 1.2rem;
+      border-radius: 20px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.9rem;
+      transition: all 0.3s ease;
+      font-family: 'Nunito Sans', 'Avenir Next', sans-serif;
+    }
+
+    .filter-btn:hover {
+      border-color: var(--zelis-gold);
+      transform: translateY(-2px);
+    }
+
+    .filter-btn.active {
+      background: var(--zelis-gold);
+      color: var(--zelis-dark);
+    }
+
+    .no-results {
+      text-align: center;
+      padding: 3rem 2rem;
+      color: var(--zelis-dark-gray);
+      font-size: 1.1rem;
+    }
+
+    .card-hidden {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo">
+      zelis<span class="logo-dot">.</span>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <h1>Product Operating System</h1>
+      <p class="subtitle">Price Optimization Business Unit</p>
+    </section>
+
+    <div class="search-container">
+      <input
+        type="text"
+        id="searchInput"
+        class="search-input"
+        placeholder="Search sections... (e.g., PDLC, Capital, Strategy)"
+        onkeyup="searchCards()"
+      >
+    </div>
+
+    <div class="filters" id="filterButtons"></div>
+
+    <div class="grid" id="cardsGrid"></div>
+
+    <div id="noResults" class="no-results hidden">
+      No sections found matching your search. Try different keywords.
+    </div>
+  </main>
+
+  <footer>
+    <div class="container">
+      <div>
+        <h4>Navigation</h4>
+        <ul style="list-style: none;">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="onboarding.html">Onboarding & Day 1</a></li>
+          <li><a href="pdlc.html">PDLC Framework</a></li>
+          <li><a href="capital.html">Capital Allocation</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Product & Strategy</h4>
+        <ul style="list-style: none;">
+          <li><a href="strategy.html">Product Strategy</a></li>
+          <li><a href="workflows.html">Product Workflows</a></li>
+          <li><a href="portfolio.html">Product Portfolio</a></li>
+          <li><a href="cadence.html">Operating Cadence</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Resources</h4>
+        <ul style="list-style: none;">
+          <li><a href="competitive.html">Competitive Intelligence</a></li>
+          <li><a href="templates.html">Templates & Tools</a></li>
+          <li><a href="research.html">Research & Reference</a></li>
+          <li><a href="mind-maps.html">Mind Maps</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-nav">
+      <div class="footer-copyright">© 2026 Zelis. Product Operating System.</div>
+    </div>
+  </footer>
+
+  <script>
+    const sections = [
+      {
+        id: 'onboarding',
+        title: 'Onboarding & Day 1',
+        description: 'Day 1 readiness, 30-day plan, listening tour',
+        icon: '🚀',
+        url: 'onboarding.html',
+        category: 'Operations',
+        keywords: ['onboarding', 'day 1', 'listening', 'readiness', 'new hire']
+      },
+      {
+        id: 'pdlc',
+        title: 'PDLC Framework',
+        description: '7-phase product development lifecycle with stage gates',
+        icon: '📚',
+        url: 'pdlc.html',
+        category: 'Frameworks',
+        keywords: ['pdlc', 'product development', 'lifecycle', 'framework', 'stage gate']
+      },
+      {
+        id: 'capital',
+        title: 'Capital Allocation',
+        description: 'Investment scoring, IRR thresholds, tier classification',
+        icon: '💰',
+        url: 'capital.html',
+        category: 'Frameworks',
+        keywords: ['capital', 'allocation', 'investment', 'scoring', 'irr']
+      },
+      {
+        id: 'competitive',
+        title: 'Competitive Intelligence',
+        description: 'Battlefield analysis vs. Lyric, Machinify, Cotiviti',
+        icon: '🎯',
+        url: 'competitive.html',
+        category: 'Intelligence',
+        keywords: ['competitive', 'intelligence', 'battlefield', 'analysis', 'market']
+      },
+      {
+        id: 'cadence',
+        title: 'Operating Cadence',
+        description: 'Weekly, bi-weekly, monthly, quarterly rhythms',
+        icon: '📅',
+        url: 'cadence.html',
+        category: 'Operations',
+        keywords: ['cadence', 'operating', 'rhythm', 'review', 'meeting']
+      },
+      {
+        id: 'finance',
+        title: 'Finance Strategy',
+        description: 'Unit economics, ROIC value drivers, revenue flows',
+        icon: '📊',
+        url: 'finance.html',
+        category: 'Strategy',
+        keywords: ['finance', 'unit economics', 'roic', 'revenue', 'financial']
+      },
+      {
+        id: 'templates',
+        title: 'Templates & Tools',
+        description: 'PRD templates, Jira guide, meeting agendas',
+        icon: '🔧',
+        url: 'templates.html',
+        category: 'Tools',
+        keywords: ['templates', 'tools', 'prd', 'jira', 'agenda']
+      },
+      {
+        id: 'workflows',
+        title: 'Product Workflows',
+        description: 'Payment Integrity, OON Pricing, Revenue money flows',
+        icon: '⚙️',
+        url: 'workflows.html',
+        category: 'Operations',
+        keywords: ['workflows', 'product', 'payment integrity', 'oon pricing', 'process']
+      },
+      {
+        id: 'strategy',
+        title: 'Product Strategy',
+        description: '2026-2028 vision, AI innovation, capital framework',
+        icon: '🧭',
+        url: 'strategy.html',
+        category: 'Strategy',
+        keywords: ['strategy', 'vision', 'ai', 'innovation', 'product']
+      },
+      {
+        id: 'research',
+        title: 'Research & Reference',
+        description: 'Industry landscape, glossary, study guides',
+        icon: '📖',
+        url: 'research.html',
+        category: 'Intelligence',
+        keywords: ['research', 'reference', 'glossary', 'industry', 'study']
+      },
+      {
+        id: 'mind-maps',
+        title: 'Mind Maps',
+        description: 'Visual maps of every major framework',
+        icon: '🧠',
+        url: 'mind-maps.html',
+        category: 'Tools',
+        keywords: ['mind maps', 'visual', 'framework', 'map']
+      },
+      {
+        id: 'portfolio',
+        title: 'Product Portfolio',
+        description: 'M&A history, product line overview',
+        icon: '📦',
+        url: 'portfolio.html',
+        category: 'Strategy',
+        keywords: ['portfolio', 'product', 'ma', 'acquisition', 'history']
+      },
+      {
+        id: 'radiology',
+        title: 'Radiology COE',
+        description: 'Imaging center of excellence initiative',
+        icon: '🏥',
+        url: 'radiology.html',
+        category: 'Strategy',
+        keywords: ['radiology', 'coe', 'imaging', 'center', 'excellence']
+      }
+    ];
+
+    function initializeCards() {
+      const cardsGrid = document.getElementById('cardsGrid');
+      cardsGrid.innerHTML = sections.map(section => `
+        <div class="card" data-id="${section.id}" data-category="${section.category}" data-keywords="${section.keywords.join(' ')}">
+          <a href="${section.url}" style="text-decoration: none; color: inherit;">
+            <div class="card-icon">${section.icon}</div>
+            <h3 class="card-title">${section.title}</h3>
+            <p class="card-description">${section.description}</p>
+            <div class="card-arrow">→</div>
+          </a>
+        </div>
+      `).join('');
+    }
+
+    function initializeFilters() {
+      const filterButtons = document.getElementById('filterButtons');
+      const categories = ['All', 'Frameworks', 'Strategy', 'Operations', 'Tools', 'Intelligence'];
+
+      filterButtons.innerHTML = categories.map(cat => `
+        <button class="filter-btn ${cat === 'All' ? 'active' : ''}" data-filter="${cat}" onclick="filterByCategory('${cat}', this)">${cat}</button>
+      `).join('');
+    }
+
+    function searchCards() {
+      const searchInput = document.getElementById('searchInput').value.toLowerCase();
+      const cards = document.querySelectorAll('.card');
+      let visibleCount = 0;
+
+      cards.forEach(card => {
+        const keywords = card.getAttribute('data-keywords').toLowerCase();
+        const title = card.querySelector('.card-title').textContent.toLowerCase();
+        const description = card.querySelector('.card-description').textContent.toLowerCase();
+
+        if (title.includes(searchInput) || keywords.includes(searchInput) || description.includes(searchInput)) {
+          card.classList.remove('card-hidden');
+          visibleCount++;
+        } else {
+          card.classList.add('card-hidden');
+        }
+      });
+
+      document.getElementById('noResults').classList.toggle('hidden', visibleCount > 0);
+    }
+
+    function filterByCategory(category, el) {
+      // Update active button
+      document.querySelectorAll('.filter-btn').forEach(btn => {
+        btn.classList.remove('active');
+      });
+      el.classList.add('active');
+
+      // Reset search
+      document.getElementById('searchInput').value = '';
+
+      // Filter cards by category
+      const cards = document.querySelectorAll('.card');
+      let visibleCount = 0;
+      cards.forEach(card => {
+        if (category === 'All' || card.getAttribute('data-category') === category) {
+          card.classList.remove('card-hidden');
+          visibleCount++;
+        } else {
+          card.classList.add('card-hidden');
+        }
+      });
+
+      document.getElementById('noResults').classList.toggle('hidden', visibleCount > 0);
+    }
+
+    // Initialize on page load
+    document.addEventListener('DOMContentLoaded', () => {
+      initializeCards();
+      initializeFilters();
+    });
+  </script>
+</body>
+</html>

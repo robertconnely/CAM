@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mind Maps - Zelis Product OS</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .mind-map-group {
+      margin-bottom: 4rem;
+    }
+
+    .mind-map-group h2 {
+      margin-top: 2rem;
+      padding-bottom: 1rem;
+      border-bottom: 2px solid var(--zelis-blue-purple);
+    }
+    /* Embed-style preview sections */
+    .figma-embed-section {
+      margin: 2rem 0;
+      padding: 1.5rem;
+      background: rgba(95, 95, 195, 0.06);
+      border-radius: 12px;
+      border: 1px solid rgba(95, 95, 195, 0.15);
+    }
+    .figma-embed-section h3 {
+      margin-top: 0;
+      color: var(--zelis-blue-purple);
+    }
+    .figma-embed-note {
+      font-size: 0.9rem;
+      opacity: 0.7;
+      margin-bottom: 1rem;
+    }
+    .figma-embed-wrapper {
+      border-radius: 8px;
+      overflow: hidden;
+      background: #fff;
+      border: 1px solid rgba(0, 0, 0, 0.08);
+      position: relative;
+    }
+    .inline-preview-img {
+      width: 100%;
+      display: block;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: opacity 0.2s ease;
+    }
+    .inline-preview-img:hover {
+      opacity: 0.92;
+    }
+
+    /* FigJam link buttons */
+    .figma-link-row {
+      margin-top: 1rem;
+    }
+    .figma-btn {
+      display: inline-block;
+      padding: 0.6rem 1.25rem;
+      background: linear-gradient(135deg, #321478, #5F5FC3);
+      color: #fff;
+      border-radius: 6px;
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 600;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .figma-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(50, 20, 120, 0.35);
+    }
+    /* Thumbnail gallery for simplified versions */
+    .image-gallery {
+      margin-top: 1rem;
+    }
+    .image-gallery .image-item {
+      cursor: pointer;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .image-gallery .image-item:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(35, 0, 75, 0.15);
+    }
+    /* Lightbox overlay */
+    .lightbox-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      background: rgba(0, 0, 0, 0.85);
+      backdrop-filter: blur(4px);
+      justify-content: center;
+      align-items: center;
+      padding: 2rem;
+    }
+    .lightbox-overlay.active { display: flex; }
+    .lightbox-img {
+      max-width: 92vw;
+      max-height: 88vh;
+      object-fit: contain;
+      border-radius: 8px;
+      box-shadow: 0 8px 40px rgba(0,0,0,0.5);
+      animation: lightboxIn 0.2s ease-out;
+    }
+    @keyframes lightboxIn {
+      from { opacity: 0; transform: scale(0.92); }
+      to { opacity: 1; transform: scale(1); }
+    }
+    .lightbox-caption {
+      position: fixed;
+      bottom: 1.5rem;
+      left: 50%;
+      transform: translateX(-50%);
+      color: #fff;
+      font-size: 0.95rem;
+      background: rgba(35, 0, 75, 0.7);
+      padding: 0.5rem 1.25rem;
+      border-radius: 6px;
+      white-space: nowrap;
+    }
+    .lightbox-close {
+      position: fixed;
+      top: 1.25rem;
+      right: 1.5rem;
+      color: #fff;
+      font-size: 2rem;
+      cursor: pointer;
+      background: rgba(35, 0, 75, 0.5);
+      border: none;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      line-height: 1;
+      transition: background 0.2s;
+    }
+    .lightbox-close:hover { background: rgba(230, 30, 45, 0.7); }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo">
+      zelis<span class="logo-dot">.</span>
+    </div>
+  </header>
+
+  <nav class="breadcrumb">
+    <a href="index.html">Home</a>
+    <span>/</span>
+    <span>Mind Maps</span>
+  </nav>
+
+  <main class="container">
+    <div class="page-content">
+      <div class="page-main">
+        <h1>Mind Maps</h1>
+        <p class="opacity-75">Visual mind maps of every major framework and concept.</p>
+
+        <h2>Overview</h2>
+        <p>Mind maps provide visual representations of complex frameworks and organizational concepts. These diagrams are useful for understanding relationships, hierarchies, and connections between different elements. Use these maps to quickly grasp the big picture and navigate to detailed documentation.</p>
+
+        <div class="mind-map-group">
+          <h2>Master Operating System</h2>
+          <p>The foundational mind map showing how all elements of the Product Operating System interconnect.</p>
+          <div class="figma-embed-section">
+            <h3>Product Operating System Master Map</h3>
+            <p class="figma-embed-note">Live interactive board — scroll to zoom, drag to pan. Use the link below to open in Figma.</p>
+            <div class="figma-embed-wrapper" style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
+              <iframe style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none;" src="https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com%2Fboard%2FlOS7XJRHpjpKHiSOInoP8w%2FProduct-Operating-System-Master%3Fnode-id%3D0-1%26p%3Df%26t%3Ddy7FIDRSwNzmhauH-0" allowfullscreen></iframe>
+            </div>
+            <div class="figma-link-row">
+              <a href="https://www.figma.com/board/lOS7XJRHpjpKHiSOInoP8w/Product-Operating-System-Master?node-id=0-1&p=f&t=dy7FIDRSwNzmhauH-0" target="_blank" class="figma-btn">Open in Figma</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="mind-map-group">
+          <h2>PDLC Framework</h2>
+          <p>Visual representation of the 7-phase product development lifecycle with stage gates and governance.</p>
+          <div class="figma-embed-section">
+            <h3>PDLC Framework</h3>
+            <p class="figma-embed-note">Click to expand. Open the FigJam board for an interactive, zoomable view.</p>
+            <div class="figma-embed-wrapper">
+
+              <img src="../Mind Maps/02_PDLC_Framework.png" alt="PDLC Framework Mind Map" class="inline-preview-img" onclick="openLightbox(this.src, 'PDLC Framework')">
+            </div>
+            <div class="figma-link-row">
+              <a href="https://www.figma.com/online-whiteboard/create-diagram/9ef3ce1c-777c-4325-bfa1-110ae668566a?utm_source=claude&utm_content=edit_in_figjam" target="_blank" class="figma-btn">Open Interactive FigJam Board</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="mind-map-group">
+          <h2>Capital Allocation</h2>
+          <p>Framework for scoring initiatives and allocating capital across the portfolio.</p>
+          <div class="figma-embed-section">
+            <h3>Capital Allocation Framework</h3>
+            <p class="figma-embed-note">Click to expand full-screen.</p>
+            <div class="figma-embed-wrapper">
+              <img src="../Mind Maps/03_Capital_Allocation.png" alt="Capital Allocation Mind Map" class="inline-preview-img" onclick="openLightbox(this.src, 'Capital Allocation Framework')">
+            </div>
+            <div class="figma-link-row">
+              <a href="https://www.figma.com/online-whiteboard/create-diagram/86df6bec-2110-40b0-beb6-e06b68d79742?utm_source=claude&utm_content=edit_in_figjam" target="_blank" class="figma-btn">Open Interactive FigJam Board</a>
+            </div>
+          </div>
+          <div class="figma-embed-section">
+            <h3>Simplified Overview</h3>
+            <p class="figma-embed-note">Click to expand.</p>
+            <div class="figma-embed-wrapper">
+              <img src="../Mind Maps/03_Capital_Allocation_Simple.png" alt="Capital Allocation Simplified" class="inline-preview-img" onclick="openLightbox(this.src, 'Capital Allocation — Simplified')">
+            </div>
+          </div>
+        </div>
+
+        <div class="mind-map-group">
+          <h2>Competitive Battlefield</h2>
+          <p>Competitive positioning map showing Zelis vs. Lyric, Machinify, and Cotiviti.</p>
+          <div class="figma-embed-section">
+            <h3>Competitive Battlefield</h3>
+            <p class="figma-embed-note">Click to expand. Open the FigJam board to explore competitor details interactively.</p>
+            <div class="figma-embed-wrapper">
+              <img src="../Mind Maps/04_Competitive_Battlefield.png" alt="Competitive Battlefield Mind Map" class="inline-preview-img" onclick="openLightbox(this.src, 'Competitive Battlefield')">
+            </div>
+            <div class="figma-link-row">
+              <a href="https://www.figma.com/online-whiteboard/create-diagram/342ace8a-ac10-4505-9759-a9ae5134ec05?utm_source=claude&utm_content=edit_in_figjam" target="_blank" class="figma-btn">Open Interactive FigJam Board</a>
+            </div>
+          </div>
+          <div class="figma-embed-section">
+            <h3>Simplified Overview</h3>
+            <p class="figma-embed-note">Click to expand.</p>
+            <div class="figma-embed-wrapper">
+              <img src="../Mind Maps/04_Competitive_Battlefield_Simple.png" alt="Competitive Battlefield Simplified" class="inline-preview-img" onclick="openLightbox(this.src, 'Competitive Battlefield — Simplified')">
+            </div>
+          </div>
+        </div>
+
+        <div class="mind-map-group">
+          <h2>Financial Engine</h2>
+          <p>Unit economics and revenue model visualization.</p>
+          <div class="figma-embed-section">
+            <h3>Financial Engine</h3>
+            <p class="figma-embed-note">Click to expand full-screen.</p>
+            <div class="figma-embed-wrapper">
+              <img src="../Mind Maps/05_Financial_Engine.png" alt="Financial Engine Mind Map" class="inline-preview-img" onclick="openLightbox(this.src, 'Financial Engine')">
+            </div>
+            <div class="figma-link-row">
+              <a href="https://www.figma.com/online-whiteboard/create-diagram/79cbd863-2da9-4bde-8314-667394fca199?utm_source=claude&utm_content=edit_in_figjam" target="_blank" class="figma-btn">Open Interactive FigJam Board</a>
+            </div>
+          </div>
+          <div class="figma-embed-section">
+            <h3>Simplified Overview</h3>
+            <p class="figma-embed-note">Click to expand.</p>
+            <div class="figma-embed-wrapper">
+              <img src="../Mind Maps/05_Financial_Engine_Simple.png" alt="Financial Engine Simplified" class="inline-preview-img" onclick="openLightbox(this.src, 'Financial Engine — Simplified')">
+            </div>
+          </div>
+        </div>
+
+        <div class="mind-map-group">
+          <h2>Day 1 Battle Plan</h2>
+          <p>First 90 days roadmap and onboarding structure.</p>
+          <div class="figma-embed-section">
+            <h3>Day 1 Battle Plan</h3>
+            <p class="figma-embed-note">Click to expand. Open the FigJam board for the interactive onboarding timeline.</p>
+            <div class="figma-embed-wrapper">
+              <img src="../Mind Maps/06_Day1_Battle_Plan.png" alt="Day 1 Battle Plan Mind Map" class="inline-preview-img" onclick="openLightbox(this.src, 'Day 1 Battle Plan')">
+            </div>
+            <div class="figma-link-row">
+              <a href="https://www.figma.com/online-whiteboard/create-diagram/74dfcc89-ef71-4a64-9d1b-de927c7f58c4?utm_source=claude&utm_content=edit_in_figjam" target="_blank" class="figma-btn">Open Interactive FigJam Board</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="mind-map-group">
+          <h2>Operating Cadence</h2>
+          <p>Five rhythms of review and governance meetings.</p>
+          <div class="figma-embed-section">
+            <h3>Operating Cadence</h3>
+            <p class="figma-embed-note">Click to expand full-screen.</p>
+            <div class="figma-embed-wrapper">
+              <img src="../Mind Maps/07_Operating_Cadence.png" alt="Operating Cadence Mind Map" class="inline-preview-img" onclick="openLightbox(this.src, 'Operating Cadence')">
+            </div>
+            <div class="figma-link-row">
+              <a href="https://www.figma.com/online-whiteboard/create-diagram/41256914-bc09-4ff4-a8b6-0cf1e7e8d6c0?utm_source=claude&utm_content=edit_in_figjam" target="_blank" class="figma-btn">Open Interactive FigJam Board</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="mind-map-group">
+          <h2>M&A Timeline</h2>
+          <p>Historical acquisitions and product portfolio evolution.</p>
+          <div class="figma-embed-section">
+            <h3>M&A Timeline</h3>
+            <p class="figma-embed-note">Click to expand. Open the FigJam board for the full acquisition history.</p>
+            <div class="figma-embed-wrapper">
+              <img src="../Mind Maps/08_MA_Timeline.png" alt="M&A Timeline Mind Map" class="inline-preview-img" onclick="openLightbox(this.src, 'M&A Timeline')">
+            </div>
+            <div class="figma-link-row">
+              <a href="https://www.figma.com/online-whiteboard/create-diagram/acbbb824-3909-4f72-9586-97d008d2d699?utm_source=claude&utm_content=edit_in_figjam" target="_blank" class="figma-btn">Open Interactive FigJam Board</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="mind-map-group">
+          <h2>Product Portfolio</h2>
+          <p>Current product offerings and market segments.</p>
+          <div class="figma-embed-section">
+            <h3>Product Portfolio</h3>
+            <p class="figma-embed-note">Click to expand full-screen.</p>
+            <div class="figma-embed-wrapper">
+              <img src="../Mind Maps/09_Product_Portfolio.png" alt="Product Portfolio Mind Map" class="inline-preview-img" onclick="openLightbox(this.src, 'Product Portfolio')">
+            </div>
+            <div class="figma-link-row">
+              <a href="https://www.figma.com/online-whiteboard/create-diagram/7916258b-0f51-4006-804a-7a3715b56c3c?utm_source=claude&utm_content=edit_in_figjam" target="_blank" class="figma-btn">Open Interactive FigJam Board</a>
+            </div>
+          </div>
+        </div>
+
+        <h2>How to Use These Maps</h2>
+
+        <h3>For Quick Orientation</h3>
+        <p>When you need to understand a topic quickly, start with the relevant mind map to grasp the key concepts and relationships. Then drill into the detailed documentation pages for deeper understanding.</p>
+
+        <h3>For Presentations</h3>
+        <p>These mind maps work well as presentation backgrounds or reference materials when explaining concepts to colleagues or customers. They provide visual structure to verbal explanations.</p>
+
+        <h3>For Documentation</h3>
+        <p>Mind maps serve as visual outlines for documentation. When writing detailed content, use the mind map structure as your outline to ensure comprehensive coverage.</p>
+
+        <h3>For Strategic Discussions</h3>
+        <p>Use the Master Operating System and Strategic maps when discussing product direction, portfolio allocation, or organizational strategy. They help align teams around shared frameworks.</p>
+
+        <h2>Cross-References</h2>
+        <p>Each mind map corresponds to a detailed documentation page:</p>
+
+        <ul>
+          <li><strong>PDLC Framework Map:</strong> <a href="pdlc.html">PDLC Framework</a> page</li>
+          <li><strong>Capital Allocation Map:</strong> <a href="capital.html">Capital Allocation</a> page</li>
+          <li><strong>Competitive Battlefield Map:</strong> <a href="competitive.html">Competitive Intelligence</a> page</li>
+          <li><strong>Financial Engine Map:</strong> <a href="finance.html">Finance Strategy</a> page</li>
+          <li><strong>Day 1 Battle Plan Map:</strong> <a href="onboarding.html">Onboarding & Day 1</a> page</li>
+          <li><strong>Operating Cadence Map:</strong> <a href="cadence.html">Operating Cadence</a> page</li>
+          <li><strong>M&A Timeline Map:</strong> <a href="portfolio.html">Product Portfolio</a> page</li>
+          <li><strong>Product Portfolio Map:</strong> <a href="portfolio.html">Product Portfolio</a> page</li>
+        </ul>
+
+        <h2>Printing & Sharing</h2>
+        <p>These mind maps are designed to be:</p>
+
+        <ul>
+          <li><strong>Printable:</strong> Print at full size for office walls or bring to meetings</li>
+          <li><strong>Shareable:</strong> Download and share in presentations or documentation</li>
+          <li><strong>Memorable:</strong> Visual representations help with retention and recall</li>
+          <li><strong>Discussion Starters:</strong> Use as conversation prompts in team meetings</li>
+        </ul>
+
+        <h2>Learning Path</h2>
+        <p>For new hires, we recommend this learning sequence:</p>
+
+        <ol>
+          <li><strong>Day 1:</strong> Review Product Operating System Master Map for context</li>
+          <li><strong>Week 1:</strong> Study PDLC Framework, Capital Allocation, and Competitive Battlefield</li>
+          <li><strong>Week 2:</strong> Review Financial Engine and Day 1 Battle Plan</li>
+          <li><strong>Week 3:</strong> Understand Operating Cadence and Product Portfolio</li>
+          <li><strong>Week 4:</strong> Review M&A Timeline and explore detailed pages for deeper learning</li>
+        </ol>
+
+        <h2>Staying Updated</h2>
+        <p>Mind maps are updated quarterly as strategy evolves. Check back regularly for updates or ask your manager for the latest versions.</p>
+      </div>
+
+      <aside class="sidebar">
+        <div class="toc">
+          <h4>On This Page</h4>
+          <ol>
+            <li><a href="#overview" onclick="smoothScroll(event)">Overview</a></li>
+            <li><a href="#master" onclick="smoothScroll(event)">Master Map</a></li>
+            <li><a href="#frameworks" onclick="smoothScroll(event)">Frameworks</a></li>
+            <li><a href="#usage" onclick="smoothScroll(event)">Usage Guide</a></li>
+            <li><a href="#learning" onclick="smoothScroll(event)">Learning Path</a></li>
+          </ol>
+        </div>
+      </aside>
+    </div>
+  </main>
+
+  <footer>
+    <div class="container">
+      <div>
+        <h4>Quick Links</h4>
+        <ul style="list-style: none;">
+          <li><a href="index.html">← Back to Home</a></li>
+          <li><a href="portfolio.html">Next: Product Portfolio →</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Related Sections</h4>
+        <ul style="list-style: none;">
+          <li><a href="research.html">Research & Reference</a></li>
+          <li><a href="workflows.html">Product Workflows</a></li>
+          <li><a href="strategy.html">Product Strategy</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-nav">
+      <div class="footer-copyright">© 2026 Zelis. Product Operating System.</div>
+    </div>
+  </footer>
+
+  <div class="lightbox-overlay" id="lightbox" onclick="closeLightbox(event)">
+    <button class="lightbox-close" aria-label="Close">&times;</button>
+    <img class="lightbox-img" id="lightboxImg" src="" alt="">
+    <div class="lightbox-caption" id="lightboxCaption"></div>
+  </div>
+
+  <script>
+
+    function smoothScroll(event) {
+      event.preventDefault();
+      const target = event.target.getAttribute('href');
+      const element = document.querySelector(target);
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+      document.querySelectorAll('.image-gallery .image-item').forEach(function(item) {
+        item.addEventListener('click', function() {
+          var img = item.querySelector('img');
+          var caption = item.querySelector('p');
+          if (img) openLightbox(img.src, caption ? caption.textContent : img.alt);
+        });
+      });
+    });
+
+    function openLightbox(src, caption) {
+      var overlay = document.getElementById('lightbox');
+      document.getElementById('lightboxImg').src = src;
+      document.getElementById('lightboxCaption').textContent = caption || '';
+      overlay.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeLightbox(e) {
+      if (e && e.target && e.target.classList.contains('lightbox-img')) return;
+      document.getElementById('lightbox').classList.remove('active');
+      document.body.style.overflow = '';
+    }
+
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') closeLightbox();
+    });
+  </script>
+</body>
+</html>

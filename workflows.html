@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Product Workflows - Zelis Product OS</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .workflow-section {
+      margin-bottom: 4rem;
+    }
+
+    .workflow-section h2 {
+      margin-top: 2rem;
+      padding-bottom: 1rem;
+      border-bottom: 2px solid var(--zelis-blue-purple);
+    }
+    .figma-embed-section {
+      margin: 2.5rem 0;
+      padding: 1.5rem;
+      background: rgba(95, 95, 195, 0.06);
+      border-radius: 12px;
+      border: 1px solid rgba(95, 95, 195, 0.15);
+    }
+    .figma-embed-section h3 {
+      margin-top: 0;
+      color: var(--zelis-blue-purple);
+    }
+    .figma-embed-note {
+      font-size: 0.9rem;
+      opacity: 0.7;
+      margin-bottom: 1rem;
+    }
+
+    .figma-embed-wrapper {
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .figma-embed-wrapper iframe {
+      display: block;
+    }
+
+    .coming-soon-notice {
+      margin: 1.5rem 0;
+      padding: 1.25rem 1.5rem;
+      background: rgba(255, 192, 0, 0.08);
+      border-left: 4px solid var(--zelis-gold);
+      border-radius: 0 8px 8px 0;
+      font-size: 0.95rem;
+    }
+    /* Clickable image hints */
+    .image-gallery .image-item {
+      cursor: pointer;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .image-gallery .image-item:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(35, 0, 75, 0.15);
+    }
+    /* Lightbox overlay */
+    .lightbox-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      background: rgba(0, 0, 0, 0.85);
+      backdrop-filter: blur(4px);
+      justify-content: center;
+      align-items: center;
+      padding: 2rem;
+    }
+    .lightbox-overlay.active {
+      display: flex;
+    }
+    .lightbox-img {
+      max-width: 92vw;
+      max-height: 88vh;
+      object-fit: contain;
+      border-radius: 8px;
+      box-shadow: 0 8px 40px rgba(0,0,0,0.5);
+      animation: lightboxIn 0.2s ease-out;
+    }
+    @keyframes lightboxIn {
+      from { opacity: 0; transform: scale(0.92); }
+      to   { opacity: 1; transform: scale(1); }
+    }
+    .lightbox-caption {
+      position: fixed;
+      bottom: 1.5rem;
+      left: 50%;
+      transform: translateX(-50%);
+      color: #fff;
+      font-size: 0.95rem;
+      background: rgba(35, 0, 75, 0.7);
+      padding: 0.5rem 1.25rem;
+      border-radius: 6px;
+      white-space: nowrap;
+    }
+    .lightbox-close {
+      position: fixed;
+      top: 1.25rem;
+      right: 1.5rem;
+      color: #fff;
+      font-size: 2rem;
+      cursor: pointer;
+      background: rgba(35, 0, 75, 0.5);
+      border: none;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      line-height: 1;
+      transition: background 0.2s;
+    }
+    .lightbox-close:hover {
+      background: rgba(230, 30, 45, 0.7);
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo">
+      zelis<span class="logo-dot">.</span>
+    </div>
+  </header>
+
+  <nav class="breadcrumb">
+    <a href="index.html">Home</a>
+    <span>/</span>
+    <span>Product Workflows</span>
+  </nav>
+
+  <main class="container">
+    <div class="page-content">
+      <div class="page-main">
+        <h1>Product Workflows</h1>
+        <p class="opacity-75">Visual process flows for Payment Integrity, OON Pricing, and Revenue models.</p>
+
+        <h2>Overview</h2>
+        <p>Product workflows document the end-to-end processes that define how Zelis claims processing works. These diagrams illustrate claim flows, money flows, and processing logic across our core product lines. Understanding these workflows is essential for product strategy, capital allocation, and competitive positioning.</p>
+
+        <div class="workflow-section">
+          <h2>Payment Integrity Workflows</h2>
+          <p>Payment Integrity (PI) workflows cover pre-payment claim editing, post-payment recovery, clinical validation, and fraud detection. These processes are where Zelis saves customers the most money.</p>
+
+          <div class="image-gallery">
+            <div class="image-item">
+              <img src="../07 - Product Workflows/Figma workflows/Payment Integrity figma flows/Pre-Payment Claim Editing Process.png" alt="Pre-Payment Claim Editing Process">
+              <p>Pre-Payment Claim Editing Process</p>
+            </div>
+            <div class="image-item">
+              <img src="../07 - Product Workflows/Figma workflows/Payment Integrity figma flows/Pre-Payment Editing Money Flow (Zelis Brand).png" alt="Pre-Payment Editing Money Flow">
+              <p>Pre-Payment Editing Money Flow</p>
+            </div>
+            <div class="image-item">
+              <img src="../07 - Product Workflows/Figma workflows/Payment Integrity figma flows/Post-Payment Recovery Process.png" alt="Post-Payment Recovery Process">
+              <p>Post-Payment Recovery Process</p>
+            </div>
+          </div>
+
+          <div class="figma-embed-section">
+            <h3>Interactive: Post-Payment Recovery Process</h3>
+            <p class="figma-embed-note">Live FigJam board &mdash; zoom, pan, and explore the full process flow.</p>
+            <div class="figma-embed-wrapper">
+              <iframe
+                src="https://embed.figma.com/board/8OcolHDqcTy9XThl8KHpwQ/Post-Payment-Recovery-Process?node-id=0-1&embed-host=zelis-product-os"
+                width="100%"
+                height="600"
+                style="border: 1px solid rgba(0,0,0,0.1); border-radius: 8px;"
+                allowfullscreen>
+              </iframe>
+            </div>
+          </div>
+
+          <h3>Payment Integrity Overview</h3>
+          <p>Pre-payment editing intercepts claims before payment, preventing overpayments from being paid. Post-payment recovery identifies overpayments after the fact for recovery. The three branded diagrams above illustrate the core PI claim and money flows. Additional workflows for Clinical DRG Validation, FWA Detection, and Post-Payment Money Flow are in development with Zelis branding.</p>
+        </div>
+
+        <div class="workflow-section">
+          <h2>OON Pricing Workflows</h2>
+          <p>Out-of-Network (OON) Pricing workflows cover claim repricing, Reference-Based Pricing (RBP), provider negotiation, and member experience. These processes help customers manage unexpected OON costs.</p>
+
+          <div class="coming-soon-notice">
+            <p><strong>Zelis-branded diagrams in progress.</strong> OON Pricing FigJam boards (Repricing Process, Repricing Money Flow, RBP Process, RBP Money Flow, Provider Negotiation, Member Experience) are being updated to the Zelis brand color system. Figma embeds will be added once branding is complete.</p>
+          </div>
+
+          <h3>OON Pricing Overview</h3>
+          <p>Repricing takes OON charges and reprices them against in-network benchmarks or reference-based pricing rates. RBP sets payment benchmarks based on clinical factors, market rates, and negotiated agreements. Provider negotiation uses data insights to drive better rates. Member experience focuses on transparency and managing patient out-of-pocket costs.</p>
+        </div>
+
+        <div class="workflow-section">
+          <h2>Revenue & Unit Economics Workflows</h2>
+          <p>Revenue and unit economics workflows illustrate the financial models and money flows that drive the business.</p>
+
+          <div class="image-gallery">
+            <div class="image-item">
+              <img src="../07 - Product Workflows/Figma workflows/Revenue and unit economics figma flows/Claim Dollar Flow - OON Pricing.png" alt="Claim Dollar Flow - OON Pricing">
+              <p>OON Pricing Claim Dollar Flow</p>
+            </div>
+            <div class="image-item">
+              <img src="../07 - Product Workflows/Figma workflows/Revenue and unit economics figma flows/Unit Economics by Product Line.png" alt="Unit Economics by Product Line">
+              <p>Unit Economics by Product Line</p>
+            </div>
+          </div>
+
+          <div class="coming-soon-notice">
+            <p><strong>Additional branded diagrams in progress.</strong> The Three-Tier Revenue Model and Payment Integrity Claim Dollar Flow are being updated to the Zelis brand color system.</p>
+          </div>
+
+          <h3>Revenue Model Overview</h3>
+          <p>Zelis operates on three revenue tiers: access fees (fixed annual contracts), per-claim processing fees (transaction-based), and savings share (percentage of customer savings). Understanding these flows is critical for financial projections and unit economics calculations.</p>
+        </div>
+
+        <div class="key-documents">
+          <h3>Related Documents</h3>
+          <div class="doc-list">
+            <div class="doc-item">
+              <div class="doc-icon">📄</div>
+              <div class="doc-link">
+                <a href="finance.html">Finance Strategy</a>
+              </div>
+            </div>
+            <div class="doc-item">
+              <div class="doc-icon">📄</div>
+              <div class="doc-link">
+                <a href="pdlc.html">PDLC Framework</a>
+              </div>
+            </div>
+            <div class="doc-item">
+              <div class="doc-icon">📄</div>
+              <div class="doc-link">
+                <a href="research.html">Research & Reference</a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <h2>Key Takeaways</h2>
+        <ul>
+          <li><strong>PI is Preventive:</strong> Pre-payment editing prevents overpayments; post-payment recovery identifies past errors</li>
+          <li><strong>OON is Proactive:</strong> Repricing and RBP help customers manage unexpected high-cost care</li>
+          <li><strong>Money Flow is Complex:</strong> Claims flow through multiple processing steps; savings accrue to payers and shared with Zelis</li>
+          <li><strong>Integration is Key:</strong> Customers with both PI and OON solutions see greater total savings</li>
+          <li><strong>Data Quality is Critical:</strong> Clean clinical and pricing data drives better results and higher savings</li>
+        </ul>
+
+        <h2>Using These Workflows</h2>
+        <p>These workflow diagrams are tools for:</p>
+        <ul>
+          <li><strong>New Hire Learning:</strong> Understand how claims processing works at Zelis</li>
+          <li><strong>Sales Conversations:</strong> Explain our solution to prospective customers</li>
+          <li><strong>Product Development:</strong> Identify opportunities for product enhancements</li>
+          <li><strong>Customer Success:</strong> Train customers on how to use our platform</li>
+          <li><strong>Strategic Planning:</strong> Visualize market opportunities and competitive differentiation</li>
+        </ul>
+      </div>
+
+      <aside class="sidebar">
+        <div class="toc">
+          <h4>On This Page</h4>
+          <ol>
+            <li><a href="#overview" onclick="smoothScroll(event)">Overview</a></li>
+            <li><a href="#pi" onclick="smoothScroll(event)">Payment Integrity</a></li>
+            <li><a href="#oon" onclick="smoothScroll(event)">OON Pricing</a></li>
+            <li><a href="#revenue" onclick="smoothScroll(event)">Revenue Models</a></li>
+            <li><a href="#using" onclick="smoothScroll(event)">Using These</a></li>
+          </ol>
+        </div>
+      </aside>
+    </div>
+  </main>
+
+  <footer>
+    <div class="container">
+      <div>
+        <h4>Quick Links</h4>
+        <ul style="list-style: none;">
+          <li><a href="index.html">← Back to Home</a></li>
+          <li><a href="strategy.html">Next: Product Strategy →</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Related Sections</h4>
+        <ul style="list-style: none;">
+          <li><a href="finance.html">Finance Strategy</a></li>
+          <li><a href="research.html">Research & Reference</a></li>
+          <li><a href="mind-maps.html">Mind Maps</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-nav">
+      <div class="footer-copyright">© 2026 Zelis. Product Operating System.</div>
+    </div>
+  </footer>
+
+  <!-- Lightbox overlay -->
+  <div class="lightbox-overlay" id="lightbox" onclick="closeLightbox(event)">
+    <button class="lightbox-close" aria-label="Close">&times;</button>
+    <img class="lightbox-img" id="lightboxImg" src="" alt="">
+    <div class="lightbox-caption" id="lightboxCaption"></div>
+  </div>
+
+  <script>
+
+    function smoothScroll(event) {
+      event.preventDefault();
+      const target = event.target.getAttribute('href');
+      const element = document.querySelector(target);
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+      // Attach lightbox click handlers to all gallery images
+      document.querySelectorAll('.image-gallery .image-item').forEach(function(item) {
+        item.addEventListener('click', function() {
+          var img = item.querySelector('img');
+          var caption = item.querySelector('p');
+          if (img) {
+            openLightbox(img.src, caption ? caption.textContent : img.alt);
+          }
+        });
+      });
+    });
+
+    function openLightbox(src, caption) {
+      var overlay = document.getElementById('lightbox');
+      var lbImg = document.getElementById('lightboxImg');
+      var lbCap = document.getElementById('lightboxCaption');
+      lbImg.src = src;
+      lbCap.textContent = caption || '';
+      overlay.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeLightbox(e) {
+      // Close if clicking overlay background, close button, or pressing escape
+      if (e && e.target && e.target.classList.contains('lightbox-img')) return;
+      var overlay = document.getElementById('lightbox');
+      overlay.classList.remove('active');
+      document.body.style.overflow = '';
+    }
+
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') closeLightbox();
+    });
+  </script>
+</body>
+</html>
