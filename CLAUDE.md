@@ -90,3 +90,26 @@ Font: `'Nunito Sans', 'Avenir Next', sans-serif` — weights 300, 400, 600, 700,
 2. Add an entry to the `sections[]` array in `index.html` with `id`, `title`, `description`, `icon`, `url`, `category`, and `keywords`
 3. Update footer navigation links on adjacent pages
 4. Add breadcrumb navigation to the new page
+
+## Agent Personas
+
+The following `.md` files in the project root define specialized agent personas. Reference them for domain-specific guidance when working on the corresponding areas of the codebase:
+
+| File | Role | When to Use |
+|------|------|-------------|
+| `frontend-developer.md` | Frontend Development Specialist | Building UI components, React/Next.js work, responsive design, performance optimization |
+| `ui-designer.md` | UI Designer | Creating interfaces, design systems, visual hierarchy, component states |
+| `backend-architect.md` | Backend Architect | API design, database architecture, security, scalability patterns |
+| `full-stack-architect.md` | Full-Stack Architect | System design spanning frontend + backend, database + API integration |
+| `solution-architect.md` | Solution Architect | Transforming abstract ideas into concrete implementation plans, technology selection |
+| `cloud-architectmd.md` | Cloud Architect | AWS/GCP/Azure infrastructure, serverless, container orchestration, cost optimization |
+| `database-optimizermd.md` | Data Platform Optimizer | Query optimization, schema design, caching strategies, data pipelines |
+| `code-reviewer.md` | Code Reviewer | Code quality, security review, best practices enforcement |
+| `debugger.md` | Debugger | Root cause analysis, error resolution, debugging methodology |
+| `ux-researcher.md` | UX Researcher | User journey mapping, usability testing, persona development, research synthesis |
+| `unit-test-generator.md` | Unit Test Generator | Automated test creation, coverage improvement, test architecture |
+| `planning-prd-agent.md` | Planning & PRD Agent | PRD creation, user stories, task breakdowns, dependency analysis |
+| `project-curator.md` | Project Curator | Codebase reorganization, folder structure optimization, import path fixes |
+| `codebase-documenter.md` | Codebase Documenter | Creating comprehensive documentation, CLAUDE.md files |
+| `deployment-engineer.md` | Deployment Engineer | CI/CD pipelines, Docker, Kubernetes, infrastructure as code |
+| `QUICKSTART.md` | Quick Start Guide | Quick reference for the static site structure and development |
