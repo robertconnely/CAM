@@ -8,6 +8,7 @@ import {
 import type { FinancialAssumptions } from "@/lib/financial";
 import type { InitiativeType, RevenueModel } from "@/lib/types/database";
 import { ClassificationCard } from "./ClassificationCard";
+import { PhaseLabel } from "@/components/ui/PhaseLabel";
 
 /* ------------------------------------------------------------------ */
 /*  Types                                                              */
@@ -633,16 +634,19 @@ export function InvestmentWizard({ onComplete }: InvestmentWizardProps) {
                 marginBottom: 16,
               }}
             >
-              <h1
-                style={{
-                  fontSize: 22,
-                  fontWeight: 700,
-                  color: "var(--zelis-dark, #23004B)",
-                  margin: 0,
-                }}
-              >
-                Investment Case Wizard
-              </h1>
+              <div>
+                <PhaseLabel phaseNumber={1} label="Ideation" color="#321478" />
+                <h1
+                  style={{
+                    fontSize: 22,
+                    fontWeight: 700,
+                    color: "var(--zelis-dark, #23004B)",
+                    margin: "0.25rem 0 0",
+                  }}
+                >
+                  Investment Case Wizard
+                </h1>
+              </div>
               <span
                 style={{
                   fontSize: 13,

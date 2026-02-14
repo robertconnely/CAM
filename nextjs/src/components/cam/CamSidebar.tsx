@@ -14,7 +14,7 @@ interface NavItem {
 
 const navItems: NavItem[] = [
   { label: "How It Works", icon: "◎", href: "/cam/overview" },
-  { label: "New Case", icon: "✦", href: "/cam/new?fresh=1" },
+  { label: "New Case Wizard", icon: "✦", href: "/cam/new?fresh=1" },
   { label: "Case Dashboard", icon: "◫", href: "/cam" },
   { label: "Initiative Pipeline", icon: "▥", href: "/cam/pipeline" },
   { label: "Initiative Tracker", icon: "▤", href: "/cam/tracker" },

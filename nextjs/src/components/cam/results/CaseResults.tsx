@@ -29,6 +29,7 @@ import type { CaseStage } from "@/lib/types/database";
 import { SubmitButton } from "@/components/cam/workflow/SubmitButton";
 import { ScoreButton } from "@/components/cam/workflow/ScoreButton";
 import { ScoringResult } from "@/components/cam/workflow/ScoringResult";
+import { PhaseLabel } from "@/components/ui/PhaseLabel";
 
 /* ─── Helpers ─── */
 
@@ -414,7 +415,12 @@ export function CaseResults({ caseId }: CaseResultsProps) {
         }}
       >
         <div style={{ flex: 1, minWidth: 0 }}>
-          <div style={{ position: "relative", display: "flex", alignItems: "center" }}>
+          <PhaseLabel
+            phaseNumber={["submitted", "approved", "scored"].includes(currentStage) ? 2 : 1}
+            label={["submitted", "approved", "scored"].includes(currentStage) ? "Business Validation" : "Ideation"}
+            color={["submitted", "approved", "scored"].includes(currentStage) ? "#41329B" : "#321478"}
+          />
+          <div style={{ position: "relative", display: "flex", alignItems: "center", marginTop: "0.25rem" }}>
             <input
               type="text"
               value={title}

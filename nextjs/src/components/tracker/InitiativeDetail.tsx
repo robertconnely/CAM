@@ -14,6 +14,7 @@ import type {
   UserRole,
 } from "@/lib/types/database";
 import { InfoTooltip } from "@/components/ui/InfoTooltip";
+import { GlossaryText } from "@/components/ui/GlossaryText";
 import { GLOSSARY } from "@/lib/glossary";
 import { PhaseIndicator } from "./PhaseIndicator";
 import { StatusBadge } from "./StatusBadge";
@@ -34,6 +35,11 @@ interface InitiativeDetailProps {
   role: UserRole | null;
   onBack: () => void;
 }
+
+const PHASE_COLORS = [
+  "#321478", "#41329B", "#5F5FC3", "#320FFF",
+  "#828CE1", "#23004B", "#E61E2D", "#FFBE00",
+];
 
 const metaLabelStyle: React.CSSProperties = {
   fontSize: "0.7rem",
@@ -369,6 +375,124 @@ export function InitiativeDetail({
           />
         </div>
       </div>
+
+      {/* Phase guidance panel */}
+      {currentPhase && (() => {
+        const phaseIdx = currentPhase.display_order - 1;
+        const phaseColor = PHASE_COLORS[phaseIdx] ?? "#321478";
+        return (
+          <div
+            style={{
+              background: "#fff",
+              borderRadius: 10,
+              padding: "1.25rem 1.25rem 1.25rem 1.5rem",
+              borderLeft: `4px solid ${phaseColor}`,
+              boxShadow: "0 2px 12px rgba(130, 140, 225, 0.06)",
+              marginBottom: "1.5rem",
+            }}
+          >
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "0.65rem",
+                marginBottom: "0.6rem",
+              }}
+            >
+              <div
+                style={{
+                  width: 32,
+                  height: 32,
+                  borderRadius: "50%",
+                  background: phaseColor,
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  fontSize: "0.8rem",
+                  fontWeight: 800,
+                  color: "#fff",
+                  flexShrink: 0,
+                  fontFamily: "'Nunito Sans', sans-serif",
+                }}
+              >
+                {currentPhase.display_order}
+              </div>
+              <div style={{ flex: 1 }}>
+                <div
+                  style={{
+                    fontSize: "0.98rem",
+                    fontWeight: 800,
+                    color: "var(--zelis-dark, #23004B)",
+                    lineHeight: 1.3,
+                  }}
+                >
+                  {currentPhase.label}
+                </div>
+              </div>
+              {currentPhase.typical_duration && (
+                <div
+                  style={{
+                    fontSize: "0.65rem",
+                    fontWeight: 700,
+                    color: phaseColor,
+                    background: `${phaseColor}10`,
+                    padding: "0.2rem 0.5rem",
+                    borderRadius: 4,
+                    whiteSpace: "nowrap",
+                  }}
+                >
+                  {currentPhase.typical_duration}
+                </div>
+              )}
+            </div>
+
+            {currentPhase.description && (
+              <p
+                style={{
+                  margin: "0 0 0.75rem",
+                  fontSize: "0.8rem",
+                  color: "var(--zelis-dark-gray, #555)",
+                  lineHeight: 1.6,
+                }}
+              >
+                <GlossaryText>{currentPhase.description}</GlossaryText>
+              </p>
+            )}
+
+            {currentPhase.gate_description && (
+              <div
+                style={{
+                  padding: "0.6rem 0.75rem",
+                  background: "var(--zelis-ice, #ECE9FF)",
+                  borderRadius: 6,
+                }}
+              >
+                <div
+                  style={{
+                    fontSize: "0.62rem",
+                    fontWeight: 700,
+                    color: phaseColor,
+                    textTransform: "uppercase",
+                    letterSpacing: "0.05em",
+                    marginBottom: "0.2rem",
+                  }}
+                >
+                  Gate Criteria
+                </div>
+                <div
+                  style={{
+                    fontSize: "0.76rem",
+                    color: "var(--zelis-dark-gray, #555)",
+                    lineHeight: 1.45,
+                  }}
+                >
+                  {currentPhase.gate_description}
+                </div>
+              </div>
+            )}
+          </div>
+        );
+      })()}
 
       {/* Info grid */}
       <div

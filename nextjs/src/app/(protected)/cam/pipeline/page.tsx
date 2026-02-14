@@ -2,6 +2,7 @@ import { createClient } from "@/lib/supabase/server";
 import { PipelineKanban } from "@/components/dashboard/PipelineKanban";
 import { PipelineKpiCards } from "@/components/dashboard/PipelineKpiCards";
 import { InitiativeViewToggle } from "@/components/dashboard/InitiativeViewToggle";
+import { PhaseLabel } from "@/components/ui/PhaseLabel";
 import type { Initiative, PdlcPhase, CapitalScore } from "@/lib/types/database";
 
 export const metadata = {
@@ -37,9 +38,10 @@ export default async function PipelinePage() {
   return (
     <div style={{ padding: "2rem 2.5rem" }}>
       <div style={{ marginBottom: "1.5rem" }}>
+        <PhaseLabel phaseNumber="3–6" label="Build → Prepare" color="#5F5FC3" />
         <h1
           style={{
-            margin: 0,
+            margin: "0.25rem 0 0",
             fontSize: "1.5rem",
             fontWeight: 800,
             color: "var(--zelis-purple, #321478)",

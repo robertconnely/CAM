@@ -5,6 +5,7 @@ import { PortfolioProductCards } from "@/components/portfolio/PortfolioProductCa
 import Link from "next/link";
 import type { PortfolioProduct } from "@/lib/types/database";
 import { InfoTooltip } from "@/components/ui/InfoTooltip";
+import { PhaseLabel } from "@/components/ui/PhaseLabel";
 import { GLOSSARY } from "@/lib/glossary";
 
 export const metadata = {
@@ -30,9 +31,10 @@ export default async function PortfolioPage() {
     <div style={{ padding: "2rem 2.5rem" }}>
       {/* Hero */}
       <div style={{ marginBottom: "1.5rem" }}>
+        <PhaseLabel phaseNumber="7–8" label="Operate" color="#320FFF" />
         <h1
           style={{
-            margin: 0,
+            margin: "0.25rem 0 0",
             fontSize: "1.5rem",
             fontWeight: 800,
             color: "var(--zelis-purple, #321478)",

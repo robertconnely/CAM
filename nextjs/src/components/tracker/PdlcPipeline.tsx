@@ -12,7 +12,7 @@ const MACRO_STAGES = [
   { name: "Strategy", color: "#321478", phases: [0, 1] },
   { name: "Build", color: "#41329B", phases: [2, 3] },
   { name: "Prepare", color: "#5F5FC3", phases: [4, 5] },
-  { name: "Launch", color: "#320FFF", phases: [6, 7] },
+  { name: "Operate", color: "#320FFF", phases: [6, 7] },
 ];
 
 const NODE_COLORS = [

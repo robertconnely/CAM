@@ -141,30 +141,33 @@ const LIFECYCLE_MAP = [
   {
     stage: "Case",
     macro: "Strategy",
+    verb: "Propose",
     color: "#321478",
     phases: [
-      { num: 1, label: "Ideation" },
-      { num: 2, label: "Business Validation" },
+      { num: 1, label: "Ideation", pageAnnotation: "New Case Wizard", linkHref: "/cam/new?fresh=1" },
+      { num: 2, label: "Business Validation", pageAnnotation: "Case Review + Scoring", linkHref: "/cam" },
     ],
   },
   {
     stage: "Initiative",
     macro: "Build → Prepare",
+    verb: "Execute",
     color: "#5F5FC3",
     phases: [
-      { num: 3, label: "Product Requirements" },
-      { num: 4, label: "Design & Development" },
-      { num: 5, label: "Marketing Strategy" },
-      { num: 6, label: "UAT & QA/QC Testing" },
+      { num: 3, label: "Product Requirements", pageAnnotation: "Initiative Tracker", linkHref: "/cam/tracker" },
+      { num: 4, label: "Design & Development", pageAnnotation: "Initiative Tracker", linkHref: "/cam/tracker" },
+      { num: 5, label: "Marketing Strategy", pageAnnotation: "Initiative Tracker", linkHref: "/cam/tracker" },
+      { num: 6, label: "UAT & QA/QC Testing", pageAnnotation: "Initiative Tracker", linkHref: "/cam/tracker" },
     ],
   },
   {
     stage: "Product",
-    macro: "Launch → Operate",
+    macro: "Operate",
+    verb: "Operate",
     color: "#320FFF",
     phases: [
-      { num: 7, label: "Launch" },
-      { num: 8, label: "Optimize & Support" },
+      { num: 7, label: "Launch", pageAnnotation: "Graduation to Portfolio", linkHref: "/cam/tracker" },
+      { num: 8, label: "Optimize & Support", pageAnnotation: "Product Portfolio", linkHref: "/cam/portfolio" },
     ],
   },
 ];
@@ -862,7 +865,8 @@ export default async function OverviewPage() {
             textAlign: "center",
           }}
         >
-          How the three lifecycle stages map onto the 8 PDLC phases.
+          How the three lifecycle stages map onto the 8 PDLC phases — and
+          where they live in the platform.
         </p>
 
         <div style={{ display: "flex", flexDirection: "column", gap: "1.25rem" }}>
@@ -899,12 +903,34 @@ export default async function OverviewPage() {
                 <div>
                   <div
                     style={{
-                      fontSize: "1rem",
-                      fontWeight: 800,
-                      color: "var(--zelis-dark, #23004B)",
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "0.5rem",
                     }}
                   >
-                    {group.stage}
+                    <span
+                      style={{
+                        fontSize: "1rem",
+                        fontWeight: 800,
+                        color: "var(--zelis-dark, #23004B)",
+                      }}
+                    >
+                      {group.stage}
+                    </span>
+                    <span
+                      style={{
+                        fontSize: "0.6rem",
+                        fontWeight: 700,
+                        textTransform: "uppercase",
+                        letterSpacing: "0.04em",
+                        color: group.color,
+                        background: `${group.color}10`,
+                        padding: "0.15rem 0.5rem",
+                        borderRadius: 4,
+                      }}
+                    >
+                      {group.verb}
+                    </span>
                   </div>
                   <div
                     style={{
@@ -969,19 +995,109 @@ export default async function OverviewPage() {
                     >
                       {phase.num}
                     </div>
-                    <span
-                      style={{
-                        fontSize: "0.78rem",
-                        fontWeight: 600,
-                        color: "var(--zelis-dark, #23004B)",
-                        whiteSpace: "nowrap",
-                      }}
-                    >
-                      {phase.label}
-                    </span>
+                    <div>
+                      <div
+                        style={{
+                          fontSize: "0.78rem",
+                          fontWeight: 600,
+                          color: "var(--zelis-dark, #23004B)",
+                          whiteSpace: "nowrap",
+                        }}
+                      >
+                        {phase.label}
+                      </div>
+                      <div
+                        style={{
+                          fontSize: "0.62rem",
+                          fontWeight: 600,
+                          color: group.color,
+                          opacity: 0.6,
+                          marginTop: "0.1rem",
+                          whiteSpace: "nowrap",
+                        }}
+                      >
+                        {phase.pageAnnotation}
+                      </div>
+                    </div>
                   </div>
                 ))}
               </div>
+
+              {/* Workflow links */}
+              {(() => {
+                const seen = new Set<string>();
+                const unique = group.phases.filter((p) => {
+                  if (seen.has(p.pageAnnotation)) return false;
+                  seen.add(p.pageAnnotation);
+                  return true;
+                });
+                return (
+                  <>
+                    <div
+                      style={{
+                        paddingLeft: "3.25rem",
+                        marginTop: "0.6rem",
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "0.5rem",
+                      }}
+                    >
+                      <span
+                        style={{
+                          fontSize: "0.55rem",
+                          fontWeight: 700,
+                          color: group.color,
+                          textTransform: "uppercase",
+                          letterSpacing: "0.06em",
+                          opacity: 0.5,
+                          whiteSpace: "nowrap",
+                        }}
+                      >
+                        In the app
+                      </span>
+                      <div
+                        style={{
+                          flex: 1,
+                          height: 1,
+                          background: `${group.color}15`,
+                        }}
+                      />
+                    </div>
+                    <div
+                      style={{
+                        display: "flex",
+                        flexWrap: "wrap",
+                        gap: "0.4rem",
+                        paddingLeft: "3.25rem",
+                        marginTop: "0.25rem",
+                      }}
+                    >
+                      {unique.map((p) => (
+                        <Link
+                          key={p.pageAnnotation}
+                          href={p.linkHref}
+                          style={{
+                            display: "inline-flex",
+                            alignItems: "center",
+                            gap: "0.25rem",
+                            padding: "0.3rem 0.6rem",
+                            borderRadius: 6,
+                            background: `${group.color}06`,
+                            border: `1px solid ${group.color}12`,
+                            fontSize: "0.68rem",
+                            fontWeight: 600,
+                            color: group.color,
+                            textDecoration: "none",
+                            whiteSpace: "nowrap",
+                          }}
+                        >
+                          {p.pageAnnotation} &rarr;
+                        </Link>
+                      ))}
+                    </div>
+                  </>
+                );
+              })()}
 
               {/* Connector between groups */}
               {gi < LIFECYCLE_MAP.length - 1 && (

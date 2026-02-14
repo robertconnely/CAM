@@ -8,6 +8,7 @@ import { CapitalWizard } from "@/components/tracker/capital/CapitalWizard";
 import { ToastProvider } from "@/components/admin/Toast";
 import { CelebrationModal } from "@/components/cam/workflow/CelebrationModal";
 import { updateCaseFromScoring } from "@/lib/cam/case-service";
+import { PhaseLabel } from "@/components/ui/PhaseLabel";
 import type { Initiative, PdlcPhase, InvestmentCase } from "@/lib/types/database";
 
 const RECOMMENDATION_LABELS: Record<string, { label: string; color: string; bg: string }> = {
@@ -268,16 +269,19 @@ export default function ScoreCasePage({
   return (
     <ToastProvider>
       <div style={{ padding: "32px 40px", maxWidth: 960, margin: "0 auto" }}>
-        <h1
-          style={{
-            fontSize: 22,
-            fontWeight: 700,
-            color: "var(--zelis-dark, #23004B)",
-            margin: "0 0 24px",
-          }}
-        >
-          Capital Scoring Wizard
-        </h1>
+        <div style={{ marginBottom: 24 }}>
+          <PhaseLabel phaseNumber={2} label="Business Validation" color="#41329B" />
+          <h1
+            style={{
+              fontSize: 22,
+              fontWeight: 700,
+              color: "var(--zelis-dark, #23004B)",
+              margin: "0.25rem 0 0",
+            }}
+          >
+            Capital Scoring Wizard
+          </h1>
+        </div>
         <CapitalWizard
           initiatives={initiatives}
           phases={phases}
