@@ -1,14 +1,16 @@
 "use client";
 
-import type { Initiative } from "@/lib/types/database";
+import type { Initiative, CapitalRecommendation } from "@/lib/types/database";
+import { ScoreBadge } from "../ScoreBadge";
 
 interface StepWelcomeProps {
   initiatives: Initiative[];
   selectedId: string | null;
   onSelect: (id: string) => void;
+  scoredInitiatives?: Record<string, string>;
 }
 
-export function StepWelcome({ initiatives, selectedId, onSelect }: StepWelcomeProps) {
+export function StepWelcome({ initiatives, selectedId, onSelect, scoredInitiatives = {} }: StepWelcomeProps) {
   return (
     <div style={{ maxWidth: 640, margin: "0 auto" }}>
       <div style={{ textAlign: "center", marginBottom: "2rem" }}>
@@ -133,10 +135,13 @@ export function StepWelcome({ initiatives, selectedId, onSelect }: StepWelcomePr
         <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}>
           {initiatives.map((init) => {
             const isSelected = selectedId === init.id;
+            const scoredRec = scoredInitiatives[init.id];
+            const isScored = !!scoredRec;
             return (
               <button
                 key={init.id}
-                onClick={() => onSelect(init.id)}
+                onClick={() => !isScored && onSelect(init.id)}
+                disabled={isScored}
                 style={{
                   display: "flex",
                   alignItems: "center",
@@ -145,9 +150,18 @@ export function StepWelcome({ initiatives, selectedId, onSelect }: StepWelcomePr
                   borderRadius: "10px",
                   borderWidth: "2px",
                   borderStyle: "solid",
-                  borderColor: isSelected ? "var(--zelis-purple)" : "var(--zelis-ice)",
-                  background: isSelected ? "#f3f0ff" : "white",
-                  cursor: "pointer",
+                  borderColor: isScored
+                    ? "var(--zelis-ice)"
+                    : isSelected
+                      ? "var(--zelis-purple)"
+                      : "var(--zelis-ice)",
+                  background: isScored
+                    ? "#fafafa"
+                    : isSelected
+                      ? "#f3f0ff"
+                      : "white",
+                  cursor: isScored ? "not-allowed" : "pointer",
+                  opacity: isScored ? 0.65 : 1,
                   textAlign: "left",
                   fontFamily: "inherit",
                   transition: "all 0.2s ease",
@@ -161,8 +175,16 @@ export function StepWelcome({ initiatives, selectedId, onSelect }: StepWelcomePr
                     borderRadius: "50%",
                     borderWidth: "2px",
                     borderStyle: "solid",
-                    borderColor: isSelected ? "var(--zelis-purple)" : "var(--zelis-medium-gray)",
-                    background: isSelected ? "var(--zelis-purple)" : "white",
+                    borderColor: isScored
+                      ? "var(--zelis-medium-gray)"
+                      : isSelected
+                        ? "var(--zelis-purple)"
+                        : "var(--zelis-medium-gray)",
+                    background: isScored
+                      ? "var(--zelis-medium-gray)"
+                      : isSelected
+                        ? "var(--zelis-purple)"
+                        : "white",
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
@@ -170,7 +192,12 @@ export function StepWelcome({ initiatives, selectedId, onSelect }: StepWelcomePr
                     transition: "all 0.2s ease",
                   }}
                 >
-                  {isSelected && (
+                  {isScored && (
+                    <svg width="10" height="8" viewBox="0 0 10 8" fill="none">
+                      <path d="M1 3.5L3.5 6L9 1" stroke="white" strokeWidth="1.5" strokeLinecap="round" />
+                    </svg>
+                  )}
+                  {isSelected && !isScored && (
                     <div
                       style={{
                         width: 8,
@@ -200,7 +227,7 @@ export function StepWelcome({ initiatives, selectedId, onSelect }: StepWelcomePr
                       style={{
                         fontSize: "0.88rem",
                         fontWeight: 700,
-                        color: "var(--zelis-dark-gray)",
+                        color: isScored ? "var(--zelis-medium-gray)" : "var(--zelis-dark-gray)",
                         overflow: "hidden",
                         textOverflow: "ellipsis",
                         whiteSpace: "nowrap",
@@ -208,6 +235,9 @@ export function StepWelcome({ initiatives, selectedId, onSelect }: StepWelcomePr
                     >
                       {init.name}
                     </span>
+                    {isScored && (
+                      <ScoreBadge recommendation={scoredRec as CapitalRecommendation} />
+                    )}
                   </div>
                   {init.owner_name && (
                     <div

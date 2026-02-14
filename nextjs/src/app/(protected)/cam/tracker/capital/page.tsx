@@ -6,6 +6,7 @@ import type {
   Initiative,
   PdlcPhase,
   UserRole,
+  CapitalRecommendation,
 } from "@/lib/types/database";
 
 export const metadata = {
@@ -36,7 +37,7 @@ export default async function CapitalScoringPage({
     redirect("/cam/tracker");
   }
 
-  const [initiativesRes, phasesRes] = await Promise.all([
+  const [initiativesRes, phasesRes, scoresRes] = await Promise.all([
     supabase
       .from("initiatives")
       .select("*")
@@ -45,10 +46,23 @@ export default async function CapitalScoringPage({
       .from("pdlc_phases")
       .select("*")
       .order("display_order", { ascending: true }),
+    supabase
+      .from("capital_scores")
+      .select("initiative_id, recommendation")
+      .order("scored_at", { ascending: false }),
   ]);
 
   const initiatives = (initiativesRes.data ?? []) as Initiative[];
   const phases = (phasesRes.data ?? []) as PdlcPhase[];
+
+  // Build map of initiative UUID → most recent recommendation
+  const scoredInitiatives: Record<string, CapitalRecommendation> = {};
+  for (const row of scoresRes.data ?? []) {
+    const s = row as { initiative_id: string; recommendation: CapitalRecommendation };
+    if (!scoredInitiatives[s.initiative_id]) {
+      scoredInitiatives[s.initiative_id] = s.recommendation;
+    }
+  }
 
   const preselectedId = params.initiative ?? null;
 
@@ -83,6 +97,7 @@ export default async function CapitalScoringPage({
           initiatives={initiatives}
           phases={phases}
           preselectedInitiativeId={preselectedId}
+          scoredInitiatives={scoredInitiatives}
         />
       </ToastProvider>
     </div>

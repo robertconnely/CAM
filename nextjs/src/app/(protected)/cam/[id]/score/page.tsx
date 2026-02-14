@@ -124,6 +124,20 @@ export default function ScoreCasePage({
         }
       }
 
+      // Check if this initiative has already been scored
+      if (bridgeInitId) {
+        const { count } = await supabase
+          .from("capital_scores")
+          .select("id", { count: "exact", head: true })
+          .eq("initiative_id", bridgeInitId);
+
+        if ((count ?? 0) > 0) {
+          setError("This case has already been scored.");
+          setLoading(false);
+          return;
+        }
+      }
+
       // Fetch all initiatives (including the one we may have just created)
       const { data: allInits } = await supabase
         .from("initiatives")

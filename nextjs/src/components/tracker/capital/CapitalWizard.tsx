@@ -155,6 +155,7 @@ interface CapitalWizardProps {
   onComplete?: (recommendation: string) => void;
   camStyle?: boolean;
   investmentCase?: InvestmentCase | null;
+  scoredInitiatives?: Record<string, string>;
 }
 
 export function CapitalWizard({
@@ -164,12 +165,19 @@ export function CapitalWizard({
   onComplete,
   camStyle,
   investmentCase,
+  scoredInitiatives,
 }: CapitalWizardProps) {
   const supabase = createClient();
   const router = useRouter();
   const { showToast } = useToast();
 
-  const [state, dispatch] = useReducer(reducer, preselectedInitiativeId ?? null, initState);
+  // If preselected initiative is already scored, ignore preselection
+  const effectivePreselected =
+    preselectedInitiativeId && scoredInitiatives?.[preselectedInitiativeId]
+      ? null
+      : preselectedInitiativeId ?? null;
+
+  const [state, dispatch] = useReducer(reducer, effectivePreselected, initState);
 
   // Track computed values for "reset" feature in pre-populated gate steps
   const computedIrr = useRef<string>("");
@@ -411,6 +419,7 @@ export function CapitalWizard({
             initiatives={initiatives}
             selectedId={state.selectedInitiativeId}
             onSelect={(id) => dispatch({ type: "SELECT_INITIATIVE", id })}
+            scoredInitiatives={scoredInitiatives ?? {}}
           />
         );
       case 1:

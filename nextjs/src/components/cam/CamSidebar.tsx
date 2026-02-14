@@ -16,7 +16,6 @@ const navItems: NavItem[] = [
   { label: "How It Works", icon: "◎", href: "/cam/overview" },
   { label: "New Case", icon: "✦", href: "/cam/new?fresh=1" },
   { label: "Case Dashboard", icon: "◫", href: "/cam" },
-  { label: "PDLC Framework", icon: "◉", href: "/cam/pdlc" },
   { label: "Initiative Pipeline", icon: "▥", href: "/cam/pipeline" },
   { label: "Initiative Tracker", icon: "▤", href: "/cam/tracker" },
   { label: "Product Portfolio", icon: "◈", href: "/cam/portfolio" },
