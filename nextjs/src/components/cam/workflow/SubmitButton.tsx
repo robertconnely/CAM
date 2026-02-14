@@ -109,7 +109,7 @@ export function SubmitButton({ investmentCase, onSubmitted }: SubmitButtonProps)
         open
         variant="submitted"
         title="Case Submitted for Approval"
-        subtitle="A bridge initiative has been created in the PDLC Pipeline. Reviewers have been notified."
+        subtitle="Reviewers have been notified. The next step is Capital Scoring, where the case will be evaluated for strategic fit and risk."
         actions={[
           {
             label: "Stay on Case",
@@ -119,8 +119,8 @@ export function SubmitButton({ investmentCase, onSubmitted }: SubmitButtonProps)
             },
           },
           {
-            label: "View Pipeline",
-            href: "/cam/pipeline",
+            label: "Back to Dashboard",
+            href: "/cam",
             primary: true,
           },
         ]}
