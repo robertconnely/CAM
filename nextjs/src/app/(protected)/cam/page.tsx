@@ -231,7 +231,7 @@ export default function CamDashboard() {
               lineHeight: 1.3,
             }}
           >
-            Capital Allocation Dashboard
+            Case Dashboard
           </h1>
           <p
             style={{
@@ -240,7 +240,7 @@ export default function CamDashboard() {
               margin: "4px 0 0",
             }}
           >
-            {allRows.length} {isLive ? "" : "sample "}investment case{allRows.length !== 1 ? "s" : ""}{isLive ? " in your portfolio" : " (sign in to save)"}
+            {allRows.length} {isLive ? "" : "sample "}investment case{allRows.length !== 1 ? "s" : ""}{isLive ? " in your portfolio ready for capital allocation" : " (sign in to save)"}
           </p>
         </div>
 
