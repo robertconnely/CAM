@@ -27,7 +27,7 @@ CREATE TYPE capital_recommendation AS ENUM ('strong_go', 'go', 'consider', 'hold
 -- =============================================
 
 CREATE TABLE capital_scores (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   initiative_id UUID NOT NULL REFERENCES initiatives(id) ON DELETE CASCADE,
 
   -- Classification

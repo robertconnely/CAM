@@ -13,7 +13,7 @@ CREATE TYPE governance_tier AS ENUM ('tier_1', 'tier_2', 'tier_3', 'tier_4');
 
 -- Configurable PDLC phase definitions (not an enum — easy to update)
 CREATE TABLE pdlc_phases (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   name TEXT NOT NULL UNIQUE,
   label TEXT NOT NULL,
   description TEXT,
@@ -25,7 +25,7 @@ CREATE TABLE pdlc_phases (
 
 -- Initiatives tracked through the PDLC pipeline
 CREATE TABLE initiatives (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   initiative_id TEXT NOT NULL UNIQUE,
   name TEXT NOT NULL,
   tier governance_tier NOT NULL DEFAULT 'tier_3',
@@ -48,7 +48,7 @@ CREATE TABLE initiatives (
 
 -- Gate review decisions recorded per initiative
 CREATE TABLE gate_reviews (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   initiative_id UUID NOT NULL REFERENCES initiatives(id) ON DELETE CASCADE,
   gate_name TEXT NOT NULL,
   phase_id UUID NOT NULL REFERENCES pdlc_phases(id),

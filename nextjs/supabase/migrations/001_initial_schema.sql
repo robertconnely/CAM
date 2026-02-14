@@ -32,7 +32,7 @@ CREATE TABLE profiles (
 
 -- Categories for hub page filter buttons
 CREATE TABLE categories (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   name TEXT NOT NULL UNIQUE,
   display_order INTEGER NOT NULL DEFAULT 0,
   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
@@ -40,7 +40,7 @@ CREATE TABLE categories (
 
 -- Sections (hub cards / content pages)
 CREATE TABLE sections (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   slug TEXT NOT NULL UNIQUE,
   title TEXT NOT NULL,
   description TEXT NOT NULL,
@@ -54,7 +54,7 @@ CREATE TABLE sections (
 
 -- Content blocks (page body content — ordered per section)
 CREATE TABLE content_blocks (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   section_id UUID NOT NULL REFERENCES sections(id) ON DELETE CASCADE,
   block_type content_block_type NOT NULL,
   content JSONB NOT NULL DEFAULT '{}',
@@ -65,7 +65,7 @@ CREATE TABLE content_blocks (
 
 -- Documents (file metadata — linked to sections)
 CREATE TABLE documents (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   section_id UUID NOT NULL REFERENCES sections(id) ON DELETE CASCADE,
   title TEXT NOT NULL,
   storage_path TEXT NOT NULL,
@@ -78,7 +78,7 @@ CREATE TABLE documents (
 
 -- TOC items (sidebar table of contents per section)
 CREATE TABLE toc_items (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   section_id UUID NOT NULL REFERENCES sections(id) ON DELETE CASCADE,
   label TEXT NOT NULL,
   anchor TEXT NOT NULL,
