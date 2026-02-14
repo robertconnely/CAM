@@ -13,6 +13,8 @@ import type {
   CapitalScore,
   UserRole,
 } from "@/lib/types/database";
+import { InfoTooltip } from "@/components/ui/InfoTooltip";
+import { GLOSSARY } from "@/lib/glossary";
 import { PhaseIndicator } from "./PhaseIndicator";
 import { StatusBadge } from "./StatusBadge";
 import { TierBadge } from "./TierBadge";
@@ -360,7 +362,13 @@ export function InitiativeDetail({
               boxShadow: "0px 4px 28px 9px rgba(130, 140, 225, 0.05)",
             }}
           >
-            <div style={metaLabelStyle}>{item.label}</div>
+            <div style={metaLabelStyle}>
+              {GLOSSARY[item.label] ? (
+                <InfoTooltip text={GLOSSARY[item.label]}>{item.label}</InfoTooltip>
+              ) : (
+                item.label
+              )}
+            </div>
             <div style={metaValueStyle}>{item.value}</div>
           </div>
         ))}

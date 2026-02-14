@@ -18,6 +18,7 @@ export type RevenueModel =
 
 export type CapitalBand = "band_a" | "band_b" | "band_c" | "band_d";
 export type CapitalRecommendation = "strong_go" | "go" | "consider" | "hold";
+export type PlcStage = "introduction" | "growth" | "maturity" | "decline";
 
 export type ContentBlockType =
   | "subtitle"
@@ -435,6 +436,66 @@ export interface Database {
           recommendation?: CapitalRecommendation | null;
         };
       };
+      portfolio_products: {
+        Row: {
+          id: string;
+          name: string;
+          description: string | null;
+          owner_name: string | null;
+          plc_stage: PlcStage;
+          initiative_id: string | null;
+          annual_recurring_revenue: number | null;
+          client_count: number | null;
+          revenue_growth_rate: number | null;
+          market_share: number | null;
+          avg_customer_ltv: number | null;
+          customer_acquisition_cost: number | null;
+          net_promoter_score: number | null;
+          retention_rate: number | null;
+          launch_date: string | null;
+          last_review_date: string | null;
+          notes: string | null;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          name: string;
+          description?: string | null;
+          owner_name?: string | null;
+          plc_stage?: PlcStage;
+          initiative_id?: string | null;
+          annual_recurring_revenue?: number | null;
+          client_count?: number | null;
+          revenue_growth_rate?: number | null;
+          market_share?: number | null;
+          avg_customer_ltv?: number | null;
+          customer_acquisition_cost?: number | null;
+          net_promoter_score?: number | null;
+          retention_rate?: number | null;
+          launch_date?: string | null;
+          last_review_date?: string | null;
+          notes?: string | null;
+        };
+        Update: {
+          name?: string;
+          description?: string | null;
+          owner_name?: string | null;
+          plc_stage?: PlcStage;
+          initiative_id?: string | null;
+          annual_recurring_revenue?: number | null;
+          client_count?: number | null;
+          revenue_growth_rate?: number | null;
+          market_share?: number | null;
+          avg_customer_ltv?: number | null;
+          customer_acquisition_cost?: number | null;
+          net_promoter_score?: number | null;
+          retention_rate?: number | null;
+          launch_date?: string | null;
+          last_review_date?: string | null;
+          notes?: string | null;
+        };
+      };
     };
     Views: Record<string, never>;
     Functions: Record<string, never>;
@@ -448,6 +509,7 @@ export interface Database {
       revenue_model: RevenueModel;
       capital_band: CapitalBand;
       capital_recommendation: CapitalRecommendation;
+      plc_stage: PlcStage;
     };
   };
 }
@@ -545,3 +607,4 @@ export type PdlcPhase = Database["public"]["Tables"]["pdlc_phases"]["Row"];
 export type Initiative = Database["public"]["Tables"]["initiatives"]["Row"];
 export type GateReview = Database["public"]["Tables"]["gate_reviews"]["Row"];
 export type CapitalScore = Database["public"]["Tables"]["capital_scores"]["Row"];
+export type PortfolioProduct = Database["public"]["Tables"]["portfolio_products"]["Row"];

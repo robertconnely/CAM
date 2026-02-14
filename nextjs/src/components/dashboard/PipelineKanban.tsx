@@ -11,14 +11,14 @@ interface PipelineKanbanProps {
 }
 
 const PHASE_COLORS = [
-  "#321478",
-  "#41329B",
-  "#5F5FC3",
-  "#320FFF",
-  "#2e7d32",
-  "#e67e00",
-  "#E61E2D",
-  "#FFC000",
+  "#23004B",  // Zelis Ink Blue Primary
+  "#321478",  // Zelis Ink Shade 1
+  "#41329B",  // Zelis Ink Shade 2
+  "#5F5FC3",  // Zelis Ink Shade 3
+  "#320FFF",  // Zelis Bright Blue
+  "#828CE1",  // Zelis Ink Shade 4
+  "#FFBE00",  // Zelis Gold
+  "#E61E2D",  // Zelis Red
 ];
 
 export function PipelineKanban({ initiatives, phases }: PipelineKanbanProps) {

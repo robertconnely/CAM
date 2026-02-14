@@ -1,5 +1,53 @@
 # Changelog
 
+## [1.1.0] - 2026-02-14
+
+### New Pages, PLC Portfolio, Glossary Tooltips & Navigation Overhaul
+
+Major expansion of the CAM platform with four new standalone pages, the PLC Portfolio for post-launch product tracking, an app-wide glossary tooltip system, and reorganized navigation.
+
+---
+
+### Added
+
+#### New CAM Pages
+- **`/cam/roic`** — ROIC Value Driver Tree as a full page with maximize/fullscreen support
+- **`/cam/pipeline`** — PDLC Initiative Pipeline with KPI summary cards and Kanban board
+- **`/cam/pdlc`** — PDLC Framework knowledge page with horizontal pipeline visualization, phase deep-dive cards, governance tiers, and CTA banner
+- **`/cam/portfolio`** — PLC Portfolio page with S-curve chart, 8 KPI cards, product cards grouped by stage, and CTA banner
+
+#### PLC Portfolio System
+- **`portfolio_products` table** (migration 009) — tracks live products through 4 PLC stages: Introduction, Growth, Maturity, Decline
+- 8 key metrics per product: ARR, client count, growth rate, market share, LTV, CAC, NPS, retention rate
+- Optional FK link to `initiatives` table for PDLC-graduated products
+- RLS policies: viewers read, editors insert/update, admins delete
+- **8 seed products** across all stages (AI Claims Adjudication, Provider Directory Intelligence, Real-Time Eligibility Verification, Payment Integrity Analytics, Network Access Platform, Claims Pricing Engine, Legacy Batch Processing, Paper EOB Generator)
+- **PlcCurveChart** — Interactive SVG S-curve with hover tooltips showing product details
+- **PortfolioKpiCards** — 8-card summary grid (Total Products, Total ARR, Avg Growth, LTV/CAC, Total Clients, Avg NPS, Avg Retention, Avg Mkt Share)
+- **PortfolioProductCards** — Cards grouped by PLC stage with 8-metric grids per product
+
+#### Glossary Tooltip System
+- **`src/components/ui/InfoTooltip.tsx`** — Portal-based tooltip (renders via `createPortal` to `document.body` with `position: fixed`) that never clips on container boundaries
+- **`src/components/ui/GlossaryText.tsx`** — Auto-scans text for glossary terms (SCAMPER, IRR, NPV, ROIC, etc.) and wraps with tooltips
+- **`src/lib/glossary.ts`** — Central definitions for 20+ business/financial terms (ARR, NPS, LTV/CAC, IRR, NPV, ROIC, SCAMPER, PDLC, PLC, CAM, Contribution Margin, Strategic Score, Payback Period, etc.)
+- Applied across: PortfolioKpiCards, PortfolioProductCards, MetricCard, InitiativeDetail, PdlcPipeline descriptions, PDLC framework deep-dive cards, ROIC page title, Portfolio PLC curve header
+
+#### PDLC Framework Updates
+- **Migration 008** — Updated `pdlc_phases` with detailed descriptions, gate criteria, key deliverables, typical durations, and macro-stage assignments
+- **`PdlcPipeline.tsx`** — Horizontal pipeline visualization with numbered nodes, gradient line, macro-stage labels, and hover detail panel
+- **`PdlcFlowDiagram.tsx`** — Alternative flow diagram component
+- **PLC stage configuration** in `constants.ts` (Introduction=#23004B, Growth=#FFBE00, Maturity=#320FFF, Decline=#B4B4B9)
+
+### Changed
+- **CamSidebar** — "Portfolio" renamed to "PLC Portfolio"; navigation order updated
+- **RoicValueDriverTree** — Extracted action buttons so Fullscreen/Clear buttons always show even with `hideTitle` prop
+- **MetricCard** — Auto-lookups glossary definitions by label; accepts optional `tooltip` override prop
+- **Middleware** — Public paths (`/cam/*`) now always refresh Supabase session to prevent RLS blocking after token expiry
+- **Home page** — `/` redirects to `/cam` (CAM dashboard is the home page)
+- **Database types** — Added `PlcStage`, `PortfolioProduct`, and updated `Database` type with `portfolio_products` table
+
+---
+
 ## [1.0.0] - 2026-02-13
 
 ### Full-Stack Migration & CAM Platform Launch

@@ -128,7 +128,7 @@ export default async function ContentPage({ params }: PageProps) {
                     Product Development Lifecycle
                   </h2>
                   <p style={{ color: "var(--zelis-blue-purple)", fontSize: "0.92rem", marginBottom: "1.5rem" }}>
-                    Our 8-phase framework for turning business ideas into products that win at scale.
+                    Our 8-phase stage-gated framework for turning business ideas into products that win at scale.
                   </p>
                   <PdlcCycleDiagram phases={pdlcPhases} />
                 </div>

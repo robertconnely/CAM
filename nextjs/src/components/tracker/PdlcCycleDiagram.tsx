@@ -7,26 +7,26 @@ interface PdlcCycleDiagramProps {
   phases: PdlcPhase[];
 }
 
-const PHASE_COLORS = [
-  "#321478", // Idea Generation
-  "#41329B", // Idea Vetting
-  "#5F5FC3", // Concept Generation
-  "#320FFF", // Design & Development
-  "#2e7d32", // Marketing Strategy
-  "#e67e00", // Product Development
-  "#E61E2D", // Launch
-  "#FFC000", // Post-Launch
+export const PHASE_COLORS = [
+  "#321478", // Ideation (Ink Shade 1)
+  "#41329B", // Business Validation (Ink Shade 2)
+  "#5F5FC3", // Product Requirements (Ink Shade 3)
+  "#320FFF", // Design & Development (Bright Blue)
+  "#828CE1", // Marketing Strategy (Ink Shade 4)
+  "#23004B", // UAT & QA/QC Testing (Ink Blue Primary)
+  "#E61E2D", // Launch (Red)
+  "#FFBE00", // Optimize & Support (Gold)
 ];
 
-const PHASE_ICONS = [
-  "💡", // Idea Generation
-  "🔍", // Idea Vetting
-  "📐", // Concept Generation
+export const PHASE_ICONS = [
+  "💡", // Ideation
+  "✅", // Business Validation
+  "📋", // Product Requirements
   "🎨", // Design & Development
   "📣", // Marketing Strategy
-  "🔧", // Product Development
+  "🧪", // UAT & QA/QC Testing
   "🚀", // Launch
-  "📊", // Post-Launch
+  "📊", // Optimize & Support
 ];
 
 export function PdlcCycleDiagram({ phases }: PdlcCycleDiagramProps) {

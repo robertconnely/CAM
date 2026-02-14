@@ -14,11 +14,6 @@ export async function updateSession(request: NextRequest) {
   const supabaseResponse = NextResponse.next({ request });
   const { pathname } = request.nextUrl;
 
-  // Allow public paths without auth
-  if (isPublicPath(pathname)) {
-    return supabaseResponse;
-  }
-
   // If Supabase isn't configured, redirect to CAM (demo mode)
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
@@ -31,6 +26,8 @@ export async function updateSession(request: NextRequest) {
     return supabaseResponse;
   }
 
+  // Always create Supabase client and refresh the session so that
+  // server components on public paths still get authenticated access.
   let response = supabaseResponse;
 
   const supabase = createServerClient(supabaseUrl, supabaseKey, {
@@ -53,6 +50,11 @@ export async function updateSession(request: NextRequest) {
   const {
     data: { user },
   } = await supabase.auth.getUser();
+
+  // Public paths: refresh session but don't require auth
+  if (isPublicPath(pathname)) {
+    return response;
+  }
 
   // Allow access to login page without auth
   if (pathname === "/login") {

@@ -12,14 +12,15 @@ import { STATUS_CONFIG } from "@/components/tracker/constants";
 interface RoicValueDriverTreeProps {
   initiatives: Initiative[];
   capitalScores: CapitalScore[];
+  hideTitle?: boolean;
 }
 
 /* ── Layout constants — left-to-right ── */
-const NODE_W = 120;
-const NODE_H = 40;
+const NODE_W = 140;
+const NODE_H = 46;
 const NODE_RX = 4;
-const H_GAP = 44;
-const V_GAP = 8;
+const H_GAP = 48;
+const V_GAP = 10;
 const PAD_LEFT = 24;
 const PAD_TOP = 24;
 
@@ -138,6 +139,7 @@ function isLeaf(node: TreeNode): boolean {
 export function RoicValueDriverTree({
   initiatives,
   capitalScores,
+  hideTitle,
 }: RoicValueDriverTreeProps) {
   const [hoveredNodeId, setHoveredNodeId] = useState<string | null>(null);
   const [selectedNodeId, setSelectedNodeId] = useState<string | null>(null);
@@ -248,7 +250,7 @@ export function RoicValueDriverTree({
           textAnchor="middle"
           dominantBaseline="middle"
           fill={textColor}
-          fontSize={ln.depth === 0 ? "11" : "8.5"}
+          fontSize={ln.depth === 0 ? "13" : "10.5"}
           fontWeight={ln.depth === 0 ? "800" : "700"}
           fontFamily="'Nunito Sans', sans-serif"
           opacity={dimmed ? 0.25 : 1}
@@ -265,7 +267,7 @@ export function RoicValueDriverTree({
             textAnchor="middle"
             dominantBaseline="middle"
             fill="rgba(255,255,255,0.7)"
-            fontSize="7"
+            fontSize="8.5"
             fontWeight="600"
             fontFamily="'Nunito Sans', sans-serif"
             opacity={dimmed ? 0.2 : 1}
@@ -281,7 +283,7 @@ export function RoicValueDriverTree({
             <circle
               cx={rx + NODE_W - 1}
               cy={ry + 1}
-              r="8"
+              r="9"
               fill="var(--zelis-gold)"
               opacity={dimmed ? 0.15 : 1}
               style={{ transition: "opacity 0.25s" }}
@@ -292,7 +294,7 @@ export function RoicValueDriverTree({
               textAnchor="middle"
               dominantBaseline="middle"
               fill="#23004B"
-              fontSize="7"
+              fontSize="8.5"
               fontWeight="800"
               fontFamily="'Nunito Sans', sans-serif"
               style={{ pointerEvents: "none" }}
@@ -599,31 +601,9 @@ export function RoicValueDriverTree({
     </>
   );
 
-  /* ── Title bar ── */
-  const titleBar = (
-    <div
-      style={{
-        display: "flex",
-        justifyContent: "space-between",
-        alignItems: "center",
-        marginBottom: "0.75rem",
-        flexShrink: 0,
-      }}
-    >
-      <div>
-        <h3 className="dashboard-section-title">ROIC Value Driver Tree</h3>
-        <p
-          style={{
-            margin: "0.2rem 0 0",
-            fontSize: "0.75rem",
-            color: "var(--zelis-medium-gray)",
-            fontWeight: 500,
-          }}
-        >
-          Aligning product initiatives to business value creation
-        </p>
-      </div>
-      <div style={{ display: "flex", gap: "0.4rem", alignItems: "center" }}>
+  /* ── Action buttons (always visible) ── */
+  const actionButtons = (
+    <div style={{ display: "flex", gap: "0.4rem", alignItems: "center" }}>
         {selectedNodeId && (
           <button
             onClick={() => setSelectedNodeId(null)}
@@ -692,7 +672,34 @@ export function RoicValueDriverTree({
             </>
           )}
         </button>
+    </div>
+  );
+
+  /* ── Title bar ── */
+  const titleBar = (
+    <div
+      style={{
+        display: "flex",
+        justifyContent: "space-between",
+        alignItems: "center",
+        marginBottom: "0.75rem",
+        flexShrink: 0,
+      }}
+    >
+      <div>
+        <h3 className="dashboard-section-title">ROIC Value Driver Tree</h3>
+        <p
+          style={{
+            margin: "0.2rem 0 0",
+            fontSize: "0.75rem",
+            color: "var(--zelis-medium-gray)",
+            fontWeight: 500,
+          }}
+        >
+          Aligning product initiatives to business value creation
+        </p>
       </div>
+      {actionButtons}
     </div>
   );
 
@@ -712,7 +719,11 @@ export function RoicValueDriverTree({
             overflow: "hidden",
           }}
         >
-          {titleBar}
+          {hideTitle ? (
+            <div style={{ display: "flex", justifyContent: "flex-end", marginBottom: "0.5rem", flexShrink: 0 }}>
+              {actionButtons}
+            </div>
+          ) : titleBar}
           {treeContent}
         </div>
         <style>{`
@@ -728,7 +739,11 @@ export function RoicValueDriverTree({
   /* ── Inline view ── */
   return (
     <div>
-      {titleBar}
+      {hideTitle ? (
+        <div style={{ display: "flex", justifyContent: "flex-end", marginBottom: "0.5rem" }}>
+          {actionButtons}
+        </div>
+      ) : titleBar}
       {treeContent}
       <style>{`
         @keyframes fadeInUp {

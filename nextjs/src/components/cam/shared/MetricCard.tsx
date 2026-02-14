@@ -1,15 +1,21 @@
 "use client";
 
 import React from "react";
+import { InfoTooltip } from "@/components/ui/InfoTooltip";
+import { GLOSSARY } from "@/lib/glossary";
 
 interface MetricCardProps {
   label: string;
   value: string;
   sub?: string;
   accent?: string;
+  /** Override auto-lookup tooltip text */
+  tooltip?: string;
 }
 
-export default function MetricCard({ label, value, sub, accent }: MetricCardProps) {
+export default function MetricCard({ label, value, sub, accent, tooltip }: MetricCardProps) {
+  const tip = tooltip ?? GLOSSARY[label];
+
   return (
     <div
       style={{
@@ -33,7 +39,7 @@ export default function MetricCard({ label, value, sub, accent }: MetricCardProp
           lineHeight: 1.2,
         }}
       >
-        {label}
+        {tip ? <InfoTooltip text={tip}>{label}</InfoTooltip> : label}
       </span>
       <span
         style={{
