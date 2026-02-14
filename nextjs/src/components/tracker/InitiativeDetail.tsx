@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
@@ -20,9 +20,10 @@ import { StatusBadge } from "./StatusBadge";
 import { TierBadge } from "./TierBadge";
 import { GateReviewForm } from "./GateReviewForm";
 import { InitiativeForm } from "./InitiativeForm";
+import { GraduationForm } from "./GraduationForm";
 import { ScoreHistory } from "./capital/ScoreHistory";
 import { ScoreBadge } from "./capital/ScoreBadge";
-import { DECISION_CONFIG } from "./constants";
+import { DECISION_CONFIG, VALUE_DRIVER_OPTIONS } from "./constants";
 
 interface InitiativeDetailProps {
   initiative: Initiative;
@@ -69,6 +70,8 @@ export function InitiativeDetail({
 }: InitiativeDetailProps) {
   const [showGateForm, setShowGateForm] = useState(false);
   const [showEditForm, setShowEditForm] = useState(false);
+  const [showGraduationForm, setShowGraduationForm] = useState(false);
+  const [alreadyGraduated, setAlreadyGraduated] = useState(false);
   const [deleteTarget, setDeleteTarget] = useState(false);
   const supabase = createClient();
   const router = useRouter();
@@ -80,6 +83,23 @@ export function InitiativeDetail({
   const currentPhase = sorted.find(
     (p) => p.id === initiative.current_phase_id
   );
+  const isLastPhase =
+    sorted.length > 0 &&
+    initiative.current_phase_id === sorted[sorted.length - 1]?.id;
+  const canGraduate =
+    canEdit &&
+    !alreadyGraduated &&
+    (initiative.status === "complete" || isLastPhase);
+
+  // Check if initiative has already been graduated to a product
+  useEffect(() => {
+    supabase
+      .from("portfolio_products")
+      .select("id")
+      .eq("initiative_id", initiative.id)
+      .limit(1)
+      .then(({ data }) => setAlreadyGraduated((data?.length ?? 0) > 0));
+  }, [initiative.id]);
   const reviews = [...gateReviews]
     .filter((r) => r.initiative_id === initiative.id)
     .sort(
@@ -177,7 +197,7 @@ export function InitiativeDetail({
               Record Gate Review
             </button>
             <Link
-              href={`/pdlc/tracker/capital?initiative=${initiative.id}`}
+              href={`/cam/tracker/capital?initiative=${initiative.id}`}
               style={{
                 padding: "0.5rem 1.15rem",
                 borderRadius: "8px",
@@ -198,6 +218,45 @@ export function InitiativeDetail({
             >
               Capital Scoring
             </Link>
+            {canGraduate && (
+              <button
+                onClick={() => setShowGraduationForm(true)}
+                style={{
+                  padding: "0.5rem 1.15rem",
+                  borderRadius: "8px",
+                  border: "none",
+                  background: "linear-gradient(135deg, #FFBE00, #e6a800)",
+                  color: "var(--zelis-dark, #23004B)",
+                  cursor: "pointer",
+                  fontWeight: 700,
+                  fontSize: "0.82rem",
+                  fontFamily: "inherit",
+                  boxShadow: "0 2px 8px rgba(255, 190, 0, 0.3)",
+                }}
+              >
+                Graduate to Portfolio
+              </button>
+            )}
+            {alreadyGraduated && (
+              <Link
+                href="/cam/portfolio"
+                style={{
+                  padding: "0.5rem 1.15rem",
+                  borderRadius: "8px",
+                  background: "rgba(50, 15, 255, 0.08)",
+                  color: "var(--zelis-blue, #320FFF)",
+                  fontWeight: 700,
+                  fontSize: "0.82rem",
+                  fontFamily: "inherit",
+                  textDecoration: "none",
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: "0.3rem",
+                }}
+              >
+                Graduated
+              </Link>
+            )}
             {canDelete && (
               <button
                 onClick={() => setDeleteTarget(true)}
@@ -373,6 +432,46 @@ export function InitiativeDetail({
           </div>
         ))}
       </div>
+
+      {/* Value Drivers */}
+      {initiative.value_driver_ids && initiative.value_driver_ids.length > 0 && (
+        <div
+          style={{
+            padding: "1rem 1.25rem",
+            background: "rgba(255, 255, 255, 0.9)",
+            backdropFilter: "blur(11px)",
+            borderRadius: "10px",
+            border: "1px solid var(--zelis-ice)",
+            boxShadow: "0px 4px 28px 9px rgba(130, 140, 225, 0.05)",
+            marginBottom: "1.5rem",
+          }}
+        >
+          <div style={metaLabelStyle}>Value Drivers</div>
+          <div style={{ display: "flex", flexWrap: "wrap", gap: "0.4rem", marginTop: "0.35rem" }}>
+            {initiative.value_driver_ids.map((driverId) => {
+              const driver = VALUE_DRIVER_OPTIONS.find((d) => d.id === driverId);
+              if (!driver) return null;
+              return (
+                <span
+                  key={driverId}
+                  style={{
+                    fontSize: "0.72rem",
+                    fontWeight: 700,
+                    color: driver.color,
+                    background: `${driver.color}10`,
+                    padding: "0.25rem 0.6rem",
+                    borderRadius: 5,
+                    border: `1px solid ${driver.color}20`,
+                    whiteSpace: "nowrap",
+                  }}
+                >
+                  {driver.shortLabel}
+                </span>
+              );
+            })}
+          </div>
+        </div>
+      )}
 
       {/* Notes */}
       {initiative.notes && (
@@ -574,6 +673,13 @@ export function InitiativeDetail({
           </div>
         )}
       </div>
+
+      {showGraduationForm && (
+        <GraduationForm
+          initiative={initiative}
+          onClose={() => setShowGraduationForm(false)}
+        />
+      )}
 
       {showGateForm && (
         <GateReviewForm

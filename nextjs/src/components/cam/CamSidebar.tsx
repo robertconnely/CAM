@@ -13,16 +13,16 @@ interface NavItem {
 }
 
 const navItems: NavItem[] = [
-  { label: "Dashboard", icon: "◫", href: "/cam" },
+  { label: "How It Works", icon: "◎", href: "/cam/overview" },
   { label: "New Case", icon: "✦", href: "/cam/new?fresh=1" },
-  { label: "ROIC Tree", icon: "⊛", href: "/cam/roic" },
+  { label: "Case Dashboard", icon: "◫", href: "/cam" },
   { label: "PDLC Framework", icon: "◉", href: "/cam/pdlc" },
-  { label: "PDLC Pipeline", icon: "▥", href: "/cam/pipeline" },
-  { label: "PLC Portfolio", icon: "◈", href: "/cam/portfolio" },
-  { label: "Initiative Tracker", icon: "▤", href: "/pdlc/tracker" },
+  { label: "Initiative Pipeline", icon: "▥", href: "/cam/pipeline" },
+  { label: "Initiative Tracker", icon: "▤", href: "/cam/tracker" },
+  { label: "Product Portfolio", icon: "◈", href: "/cam/portfolio" },
+  { label: "Value Driver Tree", icon: "⊛", href: "/cam/roic" },
   { label: "Performance", icon: "◎", href: "/cam/performance", disabled: true },
   { label: "Calculators", icon: "⊞", href: "/cam/calculators", disabled: true },
-  { label: "Reports", icon: "⊡", href: "/cam/reports", disabled: true },
 ];
 
 interface CamSidebarProps {

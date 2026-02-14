@@ -38,7 +38,8 @@ export function collectLeafIds(node: TreeNode): string[] {
 }
 
 /**
- * Map each initiative to tree leaf node IDs based on its capital score type.
+ * Map each initiative to tree leaf node IDs.
+ * Priority: 1) explicit value_driver_ids column, 2) capital score type, 3) name heuristic.
  * Returns a map from leaf node ID to list of initiatives.
  */
 export function mapInitiativesToTree(
@@ -55,14 +56,20 @@ export function mapInitiativesToTree(
   }
 
   for (const init of initiatives) {
-    const score = latestScores.get(init.id);
     let leafTargets: string[];
 
-    if (score) {
-      leafTargets = TYPE_TO_LEAF_IDS[score.initiative_type] ?? [];
+    // 1. Prefer explicit value_driver_ids column (set by user or auto-populated)
+    if (init.value_driver_ids && init.value_driver_ids.length > 0) {
+      leafTargets = init.value_driver_ids;
     } else {
-      // Fallback: use keyword matching on initiative name
-      leafTargets = guessLeafIds(init.name);
+      // 2. Fall back to capital score type mapping
+      const score = latestScores.get(init.id);
+      if (score) {
+        leafTargets = TYPE_TO_LEAF_IDS[score.initiative_type] ?? [];
+      } else {
+        // 3. Last resort: keyword matching on initiative name
+        leafTargets = guessLeafIds(init.name);
+      }
     }
 
     // Add to each mapped leaf

@@ -50,6 +50,17 @@ export const DECISION_CONFIG: Record<
   park: { label: "Park", color: "#B4B4B9", bg: "#F0F0F1", icon: "⏸" },
 };
 
+/** Key value driver leaf nodes from the ROIC tree */
+export const VALUE_DRIVER_OPTIONS: { id: string; label: string; shortLabel: string; color: string }[] = [
+  { id: "client_retention", label: "Client Retention & Expansion", shortLabel: "Client Retention", color: "#321478" },
+  { id: "cross_sell", label: "Cross-Sell Attach Rate", shortLabel: "Cross-Sell", color: "#321478" },
+  { id: "new_product_pipeline", label: "New-Product Pipeline", shortLabel: "New Products", color: "#5F5FC3" },
+  { id: "auto_adj_rate", label: "Auto-Adjudication Rate", shortLabel: "Auto-Adj Rate", color: "#41329B" },
+  { id: "compliance", label: "Regulatory Compliance", shortLabel: "Compliance", color: "#E61E2D" },
+  { id: "platform_rules", label: "Platform & Rules Engine", shortLabel: "Platform", color: "#320FFF" },
+  { id: "analytics_ml", label: "Analytics & ML", shortLabel: "Analytics & ML", color: "#320FFF" },
+];
+
 export const PLC_STAGE_CONFIG: Record<
   PlcStage,
   { label: string; color: string; bg: string; icon: string }

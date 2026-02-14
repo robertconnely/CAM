@@ -10,6 +10,7 @@ import type {
   InitiativeStatus,
   GovernanceTier,
 } from "@/lib/types/database";
+import { VALUE_DRIVER_OPTIONS } from "./constants";
 
 interface InitiativeFormProps {
   initiative?: Initiative | null;
@@ -73,6 +74,7 @@ export function InitiativeForm({
     strategic_score: initiative?.strategic_score?.toString() ?? "",
     priority_rank: initiative?.priority_rank?.toString() ?? "",
     notes: initiative?.notes ?? "",
+    value_driver_ids: initiative?.value_driver_ids ?? [],
   });
 
   useEffect(() => {
@@ -115,6 +117,7 @@ export function InitiativeForm({
         : null,
       priority_rank: form.priority_rank ? parseInt(form.priority_rank) : null,
       notes: form.notes.trim() || null,
+      value_driver_ids: form.value_driver_ids,
     };
 
     if (isEditing && initiative) {
@@ -361,6 +364,51 @@ export function InitiativeForm({
                 onChange={(e) => set("priority_rank", e.target.value)}
                 placeholder="#"
               />
+            </div>
+          </div>
+
+          {/* Value Drivers */}
+          <div style={fieldStyle}>
+            <label style={labelStyle}>Value Drivers</label>
+            <div
+              style={{
+                display: "flex",
+                flexWrap: "wrap",
+                gap: "0.5rem",
+              }}
+            >
+              {VALUE_DRIVER_OPTIONS.map((driver) => {
+                const selected = form.value_driver_ids.includes(driver.id);
+                return (
+                  <button
+                    key={driver.id}
+                    type="button"
+                    onClick={() => {
+                      setForm((f) => ({
+                        ...f,
+                        value_driver_ids: selected
+                          ? f.value_driver_ids.filter((id) => id !== driver.id)
+                          : [...f.value_driver_ids, driver.id],
+                      }));
+                    }}
+                    style={{
+                      padding: "0.4rem 0.75rem",
+                      borderRadius: "6px",
+                      border: `2px solid ${selected ? driver.color : "var(--zelis-ice)"}`,
+                      background: selected ? `${driver.color}10` : "white",
+                      color: selected ? driver.color : "var(--zelis-dark-gray, #555)",
+                      cursor: "pointer",
+                      fontSize: "0.78rem",
+                      fontWeight: selected ? 700 : 500,
+                      fontFamily: "inherit",
+                      transition: "all 0.15s",
+                      whiteSpace: "nowrap",
+                    }}
+                  >
+                    {driver.shortLabel}
+                  </button>
+                );
+              })}
             </div>
           </div>
 

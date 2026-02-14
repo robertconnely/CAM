@@ -261,6 +261,7 @@ export interface Database {
           notes: string | null;
           created_by: string | null;
           investment_case_id: string | null;
+          value_driver_ids: string[];
           created_at: string;
           updated_at: string;
         };
@@ -283,6 +284,7 @@ export interface Database {
           notes?: string | null;
           created_by?: string | null;
           investment_case_id?: string | null;
+          value_driver_ids?: string[];
         };
         Update: {
           initiative_id?: string;
@@ -300,6 +302,7 @@ export interface Database {
           strategic_score?: number | null;
           priority_rank?: number | null;
           notes?: string | null;
+          value_driver_ids?: string[];
         };
       };
       gate_reviews: {
@@ -444,6 +447,7 @@ export interface Database {
           owner_name: string | null;
           plc_stage: PlcStage;
           initiative_id: string | null;
+          value_driver_ids: string[];
           annual_recurring_revenue: number | null;
           client_count: number | null;
           revenue_growth_rate: number | null;
@@ -465,6 +469,7 @@ export interface Database {
           owner_name?: string | null;
           plc_stage?: PlcStage;
           initiative_id?: string | null;
+          value_driver_ids?: string[];
           annual_recurring_revenue?: number | null;
           client_count?: number | null;
           revenue_growth_rate?: number | null;
@@ -483,6 +488,7 @@ export interface Database {
           owner_name?: string | null;
           plc_stage?: PlcStage;
           initiative_id?: string | null;
+          value_driver_ids?: string[];
           annual_recurring_revenue?: number | null;
           client_count?: number | null;
           revenue_growth_rate?: number | null;

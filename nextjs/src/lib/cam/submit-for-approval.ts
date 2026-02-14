@@ -1,5 +1,17 @@
 import { createClient } from "@/lib/supabase/client";
-import type { InvestmentCase } from "@/lib/types/database";
+import type { InvestmentCase, InitiativeType } from "@/lib/types/database";
+
+/**
+ * Map initiative types to ROIC value driver leaf node IDs.
+ * Mirrors TYPE_TO_LEAF_IDS in mapInitiatives.ts.
+ */
+const TYPE_TO_DRIVER_IDS: Record<InitiativeType, string[]> = {
+  new_product_platform: ["new_product_pipeline", "platform_rules", "analytics_ml"],
+  major_feature_enhancement: ["cross_sell"],
+  efficiency_automation: ["auto_adj_rate", "analytics_ml"],
+  compliance_regulatory: ["compliance"],
+  client_retention_defensive: ["client_retention"],
+};
 
 /**
  * Submits an investment case for approval:
@@ -10,7 +22,7 @@ import type { InvestmentCase } from "@/lib/types/database";
 export async function submitForApproval(
   investmentCase: InvestmentCase,
   userId: string
-): Promise<{ success: boolean; error?: string }> {
+): Promise<{ success: boolean; error?: string; initiativeId?: string }> {
   const supabase = createClient();
 
   // 1. Update case status
@@ -40,6 +52,11 @@ export async function submitForApproval(
   // 3. Create or update bridge initiative
   const initiativeId = `CAM-${investmentCase.id.slice(0, 8).toUpperCase()}`;
 
+  // Derive value driver IDs from initiative type
+  const valueDriverIds: string[] = investmentCase.initiative_type
+    ? TYPE_TO_DRIVER_IDS[investmentCase.initiative_type] ?? []
+    : [];
+
   // Check if bridge initiative already exists (re-submission)
   const { data: existing } = await supabase
     .from("initiatives")
@@ -47,7 +64,10 @@ export async function submitForApproval(
     .eq("investment_case_id", investmentCase.id)
     .limit(1);
 
+  let bridgeInitiativeId: string | undefined;
+
   if (existing && existing.length > 0) {
+    bridgeInitiativeId = existing[0].id;
     // Update existing bridge initiative
     const { error: updateInitError } = await supabase
       .from("initiatives")
@@ -59,6 +79,7 @@ export async function submitForApproval(
         contribution_margin: investmentCase.financials?.contribution_margin != null
           ? Math.min(999.99, investmentCase.financials.contribution_margin as number)
           : null,
+        value_driver_ids: valueDriverIds,
       })
       .eq("id", existing[0].id);
 
@@ -66,7 +87,7 @@ export async function submitForApproval(
       console.error("[submit] updateInitiative error:", updateInitError.message);
     }
   } else {
-    const { error: initError } = await supabase
+    const { data: newInit, error: initError } = await supabase
       .from("initiatives")
       .insert({
         initiative_id: initiativeId,
@@ -84,10 +105,15 @@ export async function submitForApproval(
           : null,
         notes: `Auto-created from CAM case: ${investmentCase.title}`,
         created_by: userId,
-      });
+        value_driver_ids: valueDriverIds,
+      })
+      .select("id")
+      .single();
 
     if (initError) {
       console.error("[submit] createInitiative error:", initError.message, initError.code);
+    } else if (newInit) {
+      bridgeInitiativeId = newInit.id;
     }
   }
 
@@ -113,5 +139,5 @@ export async function submitForApproval(
     // Non-fatal: notifications are best-effort
   }
 
-  return { success: true };
+  return { success: true, initiativeId: bridgeInitiativeId };
 }

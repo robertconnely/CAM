@@ -17,7 +17,7 @@ import { InitiativeList } from "./InitiativeList";
 import { InitiativeDetail } from "./InitiativeDetail";
 import { InitiativeForm } from "./InitiativeForm";
 import { GateReviewForm } from "./GateReviewForm";
-import { STATUS_CONFIG, TIER_CONFIG } from "./constants";
+import { STATUS_CONFIG, TIER_CONFIG, VALUE_DRIVER_OPTIONS } from "./constants";
 
 interface TrackerDashboardProps {
   initiatives: Initiative[];
@@ -81,6 +81,7 @@ function TrackerDashboardInner({
   const [filterStatus, setFilterStatus] = useState<FilterStatus>("all");
   const [filterTier, setFilterTier] = useState<FilterTier>("all");
   const [filterPhase, setFilterPhase] = useState<string>("all");
+  const [filterDriver, setFilterDriver] = useState<string>("all");
   const [search, setSearch] = useState("");
 
   const canEdit = role === "admin" || role === "editor";
@@ -106,6 +107,11 @@ function TrackerDashboardInner({
     if (filterPhase !== "all") {
       result = result.filter((i) => i.current_phase_id === filterPhase);
     }
+    if (filterDriver !== "all") {
+      result = result.filter(
+        (i) => i.value_driver_ids && i.value_driver_ids.includes(filterDriver)
+      );
+    }
     if (search.trim()) {
       const q = search.toLowerCase().trim();
       result = result.filter(
@@ -124,7 +130,7 @@ function TrackerDashboardInner({
       return a.initiative_id.localeCompare(b.initiative_id);
     });
     return result;
-  }, [initiatives, filterStatus, filterTier, filterPhase, search]);
+  }, [initiatives, filterStatus, filterTier, filterPhase, filterDriver, search]);
 
   // If viewing a specific initiative
   if (selectedInitiative) {
@@ -197,7 +203,7 @@ function TrackerDashboardInner({
           {canEdit && (
             <div style={{ display: "flex", gap: "0.5rem" }}>
               <Link
-                href="/pdlc/tracker/capital"
+                href="/cam/tracker/capital"
                 style={{
                   padding: "0.55rem 1.25rem",
                   borderRadius: "10px",
@@ -361,6 +367,34 @@ function TrackerDashboardInner({
             {sorted.map((p) => (
               <option key={p.id} value={p.id}>
                 {p.display_order}. {p.label}
+              </option>
+            ))}
+          </select>
+
+          <span
+            style={{
+              fontSize: "0.72rem",
+              fontWeight: 700,
+              color: "var(--zelis-blue-purple)",
+              textTransform: "uppercase",
+              letterSpacing: "0.04em",
+            }}
+          >
+            Driver:
+          </span>
+          <select
+            value={filterDriver}
+            onChange={(e) => setFilterDriver(e.target.value)}
+            style={{
+              ...filterBtnBase,
+              appearance: "auto",
+              paddingRight: "0.5rem",
+            }}
+          >
+            <option value="all">All Drivers</option>
+            {VALUE_DRIVER_OPTIONS.map((d) => (
+              <option key={d.id} value={d.id}>
+                {d.shortLabel}
               </option>
             ))}
           </select>
