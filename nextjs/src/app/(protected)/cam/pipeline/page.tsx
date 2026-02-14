@@ -55,7 +55,7 @@ export default async function PipelinePage() {
             fontWeight: 500,
           }}
         >
-          Portfolio health and initiatives by PDLC phase
+          Track active initiatives across all PDLC phases
         </p>
       </div>
 

@@ -24,7 +24,7 @@ import {
 import type { FinancialAssumptions } from "@/lib/financial";
 import type { WizardResult } from "@/components/cam/wizard/InvestmentWizard";
 import { useInvestmentCase } from "@/hooks/useInvestmentCase";
-import { updateCase } from "@/lib/cam/case-service";
+import { updateCase, syncInitiativeTitle } from "@/lib/cam/case-service";
 import type { CaseStage } from "@/lib/types/database";
 import { SubmitButton } from "@/components/cam/workflow/SubmitButton";
 import { ScoreButton } from "@/components/cam/workflow/ScoreButton";
@@ -124,6 +124,10 @@ export function CaseResults({ caseId }: CaseResultsProps) {
   /* State: navigation source */
   const [cameFromWizard, setCameFromWizard] = useState(false);
 
+  /* State: title save feedback */
+  const [titleSaved, setTitleSaved] = useState(false);
+  const titleSaveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
   /* State: AI memo */
   const [memo, setMemo] = useState<string | null>(null);
   const [memoLoading, setMemoLoading] = useState(false);
@@ -131,6 +135,17 @@ export function CaseResults({ caseId }: CaseResultsProps) {
 
   /* Track whether DB case has been initialized into slider state */
   const dbInitialized = useRef(false);
+
+  /* Save title to DB and show feedback */
+  const saveTitle = useCallback(() => {
+    if (!caseId || !title.trim()) return;
+    const trimmed = title.trim();
+    updateCase(caseId, { title: trimmed });
+    syncInitiativeTitle(caseId, trimmed);
+    setTitleSaved(true);
+    if (titleSaveTimer.current) clearTimeout(titleSaveTimer.current);
+    titleSaveTimer.current = setTimeout(() => setTitleSaved(false), 1500);
+  }, [caseId, title]);
 
   /* Track assumptions used for last memo generation (stale detection) */
   const memoAssumptionsRef = useRef<string | null>(null);
@@ -399,34 +414,59 @@ export function CaseResults({ caseId }: CaseResultsProps) {
         }}
       >
         <div style={{ flex: 1, minWidth: 0 }}>
-          <input
-            type="text"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            style={{
-              fontSize: 22,
-              fontWeight: 700,
-              color: "var(--zelis-dark, #23004B)",
-              margin: 0,
-              lineHeight: 1.3,
-              border: "1px solid transparent",
-              borderRadius: 6,
-              padding: "2px 6px",
-              background: "transparent",
-              width: "100%",
-              fontFamily: "'Nunito Sans', 'Avenir Next', sans-serif",
-              outline: "none",
-              transition: "border-color 0.15s, background 0.15s",
-            }}
-            onFocus={(e) => {
-              e.currentTarget.style.borderColor = "var(--zelis-ice, #ECE9FF)";
-              e.currentTarget.style.background = "#fff";
-            }}
-            onBlur={(e) => {
-              e.currentTarget.style.borderColor = "transparent";
-              e.currentTarget.style.background = "transparent";
-            }}
-          />
+          <div style={{ position: "relative", display: "flex", alignItems: "center" }}>
+            <input
+              type="text"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  e.currentTarget.blur();
+                }
+              }}
+              style={{
+                fontSize: 22,
+                fontWeight: 700,
+                color: "var(--zelis-dark, #23004B)",
+                margin: 0,
+                lineHeight: 1.3,
+                border: "1px solid transparent",
+                borderRadius: 6,
+                padding: "2px 6px",
+                background: "transparent",
+                width: "100%",
+                fontFamily: "'Nunito Sans', 'Avenir Next', sans-serif",
+                outline: "none",
+                transition: "border-color 0.15s, background 0.15s",
+              }}
+              onFocus={(e) => {
+                e.currentTarget.style.borderColor = "var(--zelis-ice, #ECE9FF)";
+                e.currentTarget.style.background = "#fff";
+              }}
+              onBlur={(e) => {
+                e.currentTarget.style.borderColor = "transparent";
+                e.currentTarget.style.background = "transparent";
+                saveTitle();
+              }}
+            />
+            {titleSaved && (
+              <span
+                style={{
+                  position: "absolute",
+                  right: 8,
+                  fontSize: 12,
+                  fontWeight: 600,
+                  color: "var(--zelis-blue-purple, #5F5FC3)",
+                  opacity: 1,
+                  animation: "titleSavedFade 1.5s ease-out forwards",
+                  pointerEvents: "none",
+                  whiteSpace: "nowrap",
+                }}
+              >
+                Saved
+              </span>
+            )}
+          </div>
           <p
             style={{
               fontSize: 13,
@@ -1062,6 +1102,11 @@ export function CaseResults({ caseId }: CaseResultsProps) {
       <style>{`
         @keyframes spin {
           to { transform: rotate(360deg); }
+        }
+        @keyframes titleSavedFade {
+          0% { opacity: 1; }
+          70% { opacity: 1; }
+          100% { opacity: 0; }
         }
       `}</style>
     </div>

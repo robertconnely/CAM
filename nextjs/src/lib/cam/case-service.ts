@@ -101,6 +101,23 @@ export async function updateCase(
   return data as InvestmentCase;
 }
 
+/* ─── Sync Initiative Title ─── */
+
+/**
+ * Updates the linked initiative's name when a case title changes.
+ * Matches on investment_case_id foreign key.
+ */
+export async function syncInitiativeTitle(
+  caseId: string,
+  newTitle: string
+): Promise<void> {
+  const supabase = createClient();
+  await supabase
+    .from("initiatives")
+    .update({ name: newTitle })
+    .eq("investment_case_id", caseId);
+}
+
 /* ─── Scoring Result ─── */
 
 /**
