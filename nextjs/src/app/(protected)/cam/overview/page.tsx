@@ -903,34 +903,12 @@ export default async function OverviewPage() {
                 <div>
                   <div
                     style={{
-                      display: "flex",
-                      alignItems: "center",
-                      gap: "0.5rem",
+                      fontSize: "1rem",
+                      fontWeight: 800,
+                      color: "var(--zelis-dark, #23004B)",
                     }}
                   >
-                    <span
-                      style={{
-                        fontSize: "1rem",
-                        fontWeight: 800,
-                        color: "var(--zelis-dark, #23004B)",
-                      }}
-                    >
-                      {group.stage}
-                    </span>
-                    <span
-                      style={{
-                        fontSize: "0.6rem",
-                        fontWeight: 700,
-                        textTransform: "uppercase",
-                        letterSpacing: "0.04em",
-                        color: group.color,
-                        background: `${group.color}10`,
-                        padding: "0.15rem 0.5rem",
-                        borderRadius: 4,
-                      }}
-                    >
-                      {group.verb}
-                    </span>
+                    {group.stage}
                   </div>
                   <div
                     style={{
@@ -953,6 +931,23 @@ export default async function OverviewPage() {
                     borderRadius: 1,
                   }}
                 />
+                {/* Verb tag aligned to end of line */}
+                <span
+                  style={{
+                    fontSize: "0.65rem",
+                    fontWeight: 700,
+                    textTransform: "uppercase",
+                    letterSpacing: "0.06em",
+                    color: group.color,
+                    background: `${group.color}10`,
+                    padding: "0.2rem 0.75rem",
+                    borderRadius: 4,
+                    whiteSpace: "nowrap",
+                    flexShrink: 0,
+                  }}
+                >
+                  {group.verb}
+                </span>
               </div>
 
               {/* Phase chips */}
@@ -995,30 +990,16 @@ export default async function OverviewPage() {
                     >
                       {phase.num}
                     </div>
-                    <div>
-                      <div
-                        style={{
-                          fontSize: "0.78rem",
-                          fontWeight: 600,
-                          color: "var(--zelis-dark, #23004B)",
-                          whiteSpace: "nowrap",
-                        }}
-                      >
-                        {phase.label}
-                      </div>
-                      <div
-                        style={{
-                          fontSize: "0.62rem",
-                          fontWeight: 600,
-                          color: group.color,
-                          opacity: 0.6,
-                          marginTop: "0.1rem",
-                          whiteSpace: "nowrap",
-                        }}
-                      >
-                        {phase.pageAnnotation}
-                      </div>
-                    </div>
+                    <span
+                      style={{
+                        fontSize: "0.78rem",
+                        fontWeight: 600,
+                        color: "var(--zelis-dark, #23004B)",
+                        whiteSpace: "nowrap",
+                      }}
+                    >
+                      {phase.label}
+                    </span>
                   </div>
                 ))}
               </div>
