@@ -44,7 +44,7 @@ const ACTIONS = [
   {
     label: "Knowledge Hub",
     description: "Browse operating system resources and documents",
-    href: "/hub",
+    href: "/cam/hub",
     gradient: "linear-gradient(135deg, var(--zelis-ice) 0%, #f5f3ff 100%)",
     color: "var(--zelis-purple)",
     iconColor: "var(--zelis-blue-purple)",

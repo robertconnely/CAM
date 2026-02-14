@@ -39,7 +39,7 @@ export function Footer({ prevPage, nextPage, relatedSections }: FooterProps) {
             <Link href="/">Dashboard</Link>
           </p>
           <p>
-            <Link href="/hub">Knowledge Hub</Link>
+            <Link href="/cam/hub">Knowledge Hub</Link>
           </p>
           {prevPage && (
             <p>

@@ -21,7 +21,7 @@ const navItems: NavItem[] = [
   { label: "Initiative Tracker", icon: "▤", href: "/cam/tracker" },
   { label: "Product Portfolio", icon: "◈", href: "/cam/portfolio" },
   { label: "Value Driver Tree", icon: "⊛", href: "/cam/roic" },
-  { label: "Performance", icon: "◎", href: "/cam/performance", disabled: true },
+  { label: "Knowledge Hub", icon: "◎", href: "/cam/hub" },
   { label: "Calculators", icon: "⊞", href: "/cam/calculators", disabled: true },
 ];
 
