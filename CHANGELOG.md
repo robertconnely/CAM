@@ -1,5 +1,54 @@
 # Changelog
 
+## [1.2.0] - 2026-02-14
+
+### UX Fixes, Loading Skeletons, Error Boundaries & Settings Page
+
+Addresses all Priority 1 functional gaps from the UX review: loading states, error handling, search/filters, sidebar sign-out, stale memo detection, and migrates Admin to a CAM-integrated Settings page.
+
+---
+
+### Added
+
+#### Loading Skeletons
+- **`src/components/ui/Skeleton.tsx`** — Reusable `SkeletonBox` and `SkeletonCard` components with shimmer animation
+- **`loading.tsx`** files for `/cam`, `/cam/pipeline`, `/cam/portfolio`, `/cam/roic`, `/cam/pdlc`, `/cam/settings` — page-specific skeleton layouts matching each page's structure
+
+#### Error Boundaries
+- **`/cam/error.tsx`** — Zelis-branded error boundary with "Try Again" button, catches errors from all `/cam/*` routes
+- Server pages (`pipeline`, `portfolio`, `roic`, `pdlc`) now throw on Supabase fetch errors instead of silently returning empty arrays
+
+#### Dashboard Search & Filters
+- Search input above cases table — filters by case title (case-insensitive)
+- Status filter pills: All, Draft, In Progress, Submitted, Approved, Rejected, Tracking
+- Filter-aware empty state with "Clear filters" button
+- Client-side `useMemo` filtering (no server-side changes)
+
+#### Stale Memo Indicator
+- Tracks assumption snapshot at memo generation time via `memoAssumptionsRef`
+- Gold banner appears when sliders diverge: "Assumptions have changed since this memo was generated." with Regenerate button
+- Banner clears after successful regeneration
+
+#### Sidebar Sign Out
+- Dynamic user initial and email from auth context (replaces hardcoded "R" / "Rob")
+- Sign-out icon button (logout arrow SVG) with hover state
+- Clicking avatar/username navigates to Settings page
+
+#### Settings Page (`/cam/settings`)
+- Moved admin functionality from `/admin` to `/cam/settings` — now renders inside the CAM sidebar layout
+- Old `/admin` route auto-redirects to `/cam/settings`
+- Loading skeleton for settings page
+
+### Changed
+- **AdminDashboard** — Renamed "Admin Dashboard" to "Settings"; restyled with CAM-consistent inline styles (tab pills with icons, white content card, matching header pattern)
+- **Footer** — "Admin" link renamed to "Settings", points to `/cam/settings`
+- **EditPageLink** — Updated href from `/admin` to `/cam/settings`
+
+### Removed
+- **Export PDF button** — Removed non-functional stub from CaseResults to eliminate expectation mismatch
+
+---
+
 ## [1.1.0] - 2026-02-14
 
 ### New Pages, PLC Portfolio, Glossary Tooltips & Navigation Overhaul
