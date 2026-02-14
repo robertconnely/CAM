@@ -5,7 +5,7 @@ import { InitiativeViewToggle } from "@/components/dashboard/InitiativeViewToggl
 import type { Initiative, PdlcPhase, CapitalScore } from "@/lib/types/database";
 
 export const metadata = {
-  title: "PDLC Initiative Pipeline — CAM",
+  title: "Initiative Pipeline — CAM",
 };
 
 export default async function PipelinePage() {
@@ -45,7 +45,7 @@ export default async function PipelinePage() {
             color: "var(--zelis-purple, #321478)",
           }}
         >
-          PDLC Initiative Pipeline
+          Initiative Pipeline
         </h1>
         <p
           style={{

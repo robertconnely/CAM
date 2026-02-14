@@ -62,48 +62,66 @@ export default function ScoreCasePage({
       setPhases((allPhases ?? []) as PdlcPhase[]);
 
       let bridgeInitId: string | null = null;
+      const initiativeId = `CAM-${caseId.slice(0, 8).toUpperCase()}`;
 
       if (inits && inits.length > 0) {
         bridgeInitId = inits[0].id;
       } else {
-        // No bridge initiative — create one on the fly
-        const phaseId = allPhases?.[0]?.id;
-        if (!phaseId || !user) {
-          setError("Unable to create scoring initiative. Please try again.");
-          setLoading(false);
-          return;
-        }
-
-        const initiativeId = `CAM-${caseId.slice(0, 8).toUpperCase()}`;
-        const { data: newInit, error: createErr } = await supabase
+        // Fallback: check by initiative_id (may exist without investment_case_id FK)
+        const { data: byInitId } = await supabase
           .from("initiatives")
-          .insert({
-            initiative_id: initiativeId,
-            name: ic.title,
-            tier: "tier_2",
-            current_phase_id: phaseId,
-            status: "on_track",
-            owner_id: user.id,
-            investment_case_id: caseId,
-            irr: ic.financials?.irr
-              ? Math.min(999.99, Math.round((ic.financials.irr as number) * 10000) / 100)
-              : null,
-            contribution_margin: ic.financials?.contribution_margin != null
-              ? Math.min(999.99, ic.financials.contribution_margin as number)
-              : null,
-            notes: `Auto-created from CAM case: ${ic.title}`,
-            created_by: user.id,
-          })
-          .select("id")
-          .single();
+          .select("id, investment_case_id")
+          .eq("initiative_id", initiativeId)
+          .limit(1);
 
-        if (createErr || !newInit) {
-          console.error("[score] auto-create initiative error:", createErr?.message);
-          setError("Failed to create scoring initiative.");
-          setLoading(false);
-          return;
+        if (byInitId && byInitId.length > 0) {
+          bridgeInitId = byInitId[0].id;
+          // Backfill the FK if missing
+          if (!byInitId[0].investment_case_id) {
+            await supabase
+              .from("initiatives")
+              .update({ investment_case_id: caseId })
+              .eq("id", byInitId[0].id);
+          }
+        } else {
+          // No initiative exists — create one
+          const phaseId = allPhases?.[0]?.id;
+          if (!phaseId || !user) {
+            setError("Unable to create scoring initiative. Please try again.");
+            setLoading(false);
+            return;
+          }
+
+          const { data: newInit, error: createErr } = await supabase
+            .from("initiatives")
+            .insert({
+              initiative_id: initiativeId,
+              name: ic.title,
+              tier: "tier_2",
+              current_phase_id: phaseId,
+              status: "on_track",
+              owner_id: user.id,
+              investment_case_id: caseId,
+              irr: ic.financials?.irr
+                ? Math.min(999.99, Math.round((ic.financials.irr as number) * 10000) / 100)
+                : null,
+              contribution_margin: ic.financials?.contribution_margin != null
+                ? Math.min(999.99, ic.financials.contribution_margin as number)
+                : null,
+              notes: `Auto-created from CAM case: ${ic.title}`,
+              created_by: user.id,
+            })
+            .select("id")
+            .single();
+
+          if (createErr || !newInit) {
+            console.error("[score] auto-create initiative error:", createErr?.message);
+            setError("Failed to create scoring initiative.");
+            setLoading(false);
+            return;
+          }
+          bridgeInitId = newInit.id;
         }
-        bridgeInitId = newInit.id;
       }
 
       // Fetch all initiatives (including the one we may have just created)
