@@ -38,25 +38,56 @@ export function ConfirmDialog({
       <div
         style={{
           background: "white",
-          borderRadius: "12px",
+          borderRadius: 12,
           padding: "2rem",
-          maxWidth: "400px",
+          maxWidth: 400,
           width: "100%",
+          boxShadow: "0px 4px 28px 9px rgba(130, 140, 225, 0.15)",
         }}
       >
-        <h3 style={{ marginTop: 0, marginBottom: "0.75rem" }}>{title}</h3>
-        <p style={{ marginBottom: "1.5rem", opacity: 0.8 }}>{message}</p>
+        <h3 style={{
+          marginTop: 0,
+          marginBottom: "0.5rem",
+          fontSize: "1.1rem",
+          fontWeight: 800,
+          color: "var(--zelis-purple, #321478)",
+        }}>{title}</h3>
+        <p style={{
+          marginBottom: "1.5rem",
+          fontSize: "0.85rem",
+          color: "var(--zelis-dark-gray, #555)",
+          lineHeight: 1.5,
+        }}>{message}</p>
         <div style={{ display: "flex", gap: "0.75rem", justifyContent: "flex-end" }}>
-          <button className="filter-btn" onClick={onCancel}>
+          <button
+            onClick={onCancel}
+            style={{
+              padding: "8px 20px",
+              borderRadius: 8,
+              border: "1px solid var(--zelis-ice, #ECE9FF)",
+              background: "#fff",
+              color: "var(--zelis-dark, #23004B)",
+              fontSize: "0.82rem",
+              fontWeight: 600,
+              fontFamily: "inherit",
+              cursor: "pointer",
+            }}
+          >
             Cancel
           </button>
           <button
-            className="filter-btn"
             onClick={onConfirm}
             style={{
-              background: "var(--zelis-red)",
-              color: "white",
-              borderColor: "var(--zelis-red)",
+              padding: "8px 20px",
+              borderRadius: 8,
+              border: "none",
+              background: "var(--zelis-red, #E61E2D)",
+              color: "#fff",
+              fontSize: "0.82rem",
+              fontWeight: 700,
+              fontFamily: "inherit",
+              cursor: "pointer",
+              boxShadow: "0 2px 8px rgba(230, 30, 45, 0.25)",
             }}
           >
             {confirmLabel}

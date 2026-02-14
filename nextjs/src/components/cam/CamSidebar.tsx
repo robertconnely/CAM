@@ -14,11 +14,12 @@ interface NavItem {
 
 const navItems: NavItem[] = [
   { label: "Dashboard", icon: "◫", href: "/cam" },
-  { label: "New Case", icon: "✦", href: "/cam/new" },
+  { label: "New Case", icon: "✦", href: "/cam/new?fresh=1" },
   { label: "ROIC Tree", icon: "⊛", href: "/cam/roic" },
   { label: "PDLC Framework", icon: "◉", href: "/cam/pdlc" },
   { label: "PDLC Pipeline", icon: "▥", href: "/cam/pipeline" },
   { label: "PLC Portfolio", icon: "◈", href: "/cam/portfolio" },
+  { label: "Initiative Tracker", icon: "▤", href: "/pdlc/tracker" },
   { label: "Performance", icon: "◎", href: "/cam/performance", disabled: true },
   { label: "Calculators", icon: "⊞", href: "/cam/calculators", disabled: true },
   { label: "Reports", icon: "⊡", href: "/cam/reports", disabled: true },

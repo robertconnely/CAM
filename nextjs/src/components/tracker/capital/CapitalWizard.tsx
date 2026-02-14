@@ -355,7 +355,7 @@ export function CapitalWizard({
     if (onComplete) {
       onComplete(result.recommendation);
     } else {
-      router.push("/pdlc/tracker");
+      router.push("/cam/pipeline");
       router.refresh();
     }
   }, [selectedInitiative, state, supabase, router, showToast, onComplete]);

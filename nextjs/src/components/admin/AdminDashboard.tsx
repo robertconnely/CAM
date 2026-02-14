@@ -25,10 +25,35 @@ interface AdminDashboardProps {
 
 type Tab = "sections" | "documents" | "users";
 
-const tabMeta: { key: Tab; label: string; icon: string; adminOnly?: boolean }[] = [
-  { key: "sections", label: "Content", icon: "◉" },
-  { key: "documents", label: "Documents", icon: "⊡" },
-  { key: "users", label: "Users", icon: "◎", adminOnly: true },
+const TAB_ICONS: Record<Tab, React.ReactNode> = {
+  sections: (
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+      <rect x="1" y="1" width="6" height="6" rx="1.5" stroke="currentColor" strokeWidth="1.5" />
+      <rect x="9" y="1" width="6" height="6" rx="1.5" stroke="currentColor" strokeWidth="1.5" />
+      <rect x="1" y="9" width="6" height="6" rx="1.5" stroke="currentColor" strokeWidth="1.5" />
+      <rect x="9" y="9" width="6" height="6" rx="1.5" stroke="currentColor" strokeWidth="1.5" />
+    </svg>
+  ),
+  documents: (
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+      <path d="M4 1h5.5L13 4.5V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1Z" stroke="currentColor" strokeWidth="1.5" />
+      <path d="M9 1v4h4" stroke="currentColor" strokeWidth="1.5" />
+      <line x1="5.5" y1="8" x2="10.5" y2="8" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+      <line x1="5.5" y1="11" x2="9" y2="11" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+    </svg>
+  ),
+  users: (
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+      <circle cx="8" cy="5" r="3" stroke="currentColor" strokeWidth="1.5" />
+      <path d="M2.5 14c0-2.5 2.5-4 5.5-4s5.5 1.5 5.5 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+    </svg>
+  ),
+};
+
+const tabMeta: { key: Tab; label: string; adminOnly?: boolean }[] = [
+  { key: "sections", label: "Content" },
+  { key: "documents", label: "Documents" },
+  { key: "users", label: "Users", adminOnly: true },
 ];
 
 export function AdminDashboard({
@@ -82,17 +107,15 @@ export function AdminDashboard({
                   style={{
                     display: "inline-flex",
                     alignItems: "center",
-                    gap: 6,
+                    gap: 7,
                     padding: "8px 18px",
                     borderRadius: 8,
-                    border: active
-                      ? "1px solid var(--zelis-blue-purple, #5F5FC3)"
-                      : "1px solid var(--zelis-ice, #ECE9FF)",
+                    border: "none",
                     background: active
-                      ? "rgba(95,95,195,0.1)"
+                      ? "var(--zelis-blue-purple, #5F5FC3)"
                       : "#fff",
                     color: active
-                      ? "var(--zelis-blue-purple, #5F5FC3)"
+                      ? "#fff"
                       : "var(--zelis-dark, #23004B)",
                     fontSize: 13,
                     fontWeight: active ? 700 : 500,
@@ -100,11 +123,11 @@ export function AdminDashboard({
                     cursor: "pointer",
                     transition: "all 0.15s",
                     boxShadow: active
-                      ? "none"
-                      : "0 1px 3px rgba(0,0,0,0.04), 0 1px 2px rgba(0,0,0,0.02)",
+                      ? "0 2px 8px rgba(95, 95, 195, 0.3)"
+                      : "0px 2px 12px rgba(130, 140, 225, 0.08)",
                   }}
                 >
-                  <span style={{ fontSize: 14 }}>{tab.icon}</span>
+                  {TAB_ICONS[tab.key]}
                   {tab.label}
                 </button>
               );
@@ -116,10 +139,8 @@ export function AdminDashboard({
           style={{
             background: "#fff",
             borderRadius: 12,
-            border: "1px solid var(--zelis-ice, #ECE9FF)",
-            boxShadow:
-              "0 1px 3px rgba(0,0,0,0.04), 0 1px 2px rgba(0,0,0,0.02)",
-            padding: 24,
+            boxShadow: "0px 4px 28px 9px rgba(130, 140, 225, 0.07)",
+            padding: "1.5rem",
           }}
         >
           {activeTab === "sections" && (

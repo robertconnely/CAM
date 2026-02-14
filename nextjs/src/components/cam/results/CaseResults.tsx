@@ -145,17 +145,8 @@ export function CaseResults({ caseId }: CaseResultsProps) {
 
     if (investmentCase.memo_content) {
       setMemo(investmentCase.memo_content);
-      // Snapshot DB assumptions so stale detection works from initial load
-      const a = investmentCase.assumptions;
-      memoAssumptionsRef.current = JSON.stringify({
-        ...DEFAULT_ASSUMPTIONS,
-        monthly_price: a.monthly_price ?? DEFAULT_ASSUMPTIONS.monthly_price,
-        year1_customers: a.year1_customers ?? DEFAULT_ASSUMPTIONS.year1_customers,
-        revenue_growth_pct: a.revenue_growth_pct ?? DEFAULT_ASSUMPTIONS.revenue_growth_pct,
-        investment_amount: a.investment_amount ?? DEFAULT_ASSUMPTIONS.investment_amount,
-        gross_margin_pct: a.gross_margin_pct ?? DEFAULT_ASSUMPTIONS.gross_margin_pct,
-        discount_rate: a.discount_rate ?? DEFAULT_ASSUMPTIONS.discount_rate,
-      });
+      // Don't snapshot here — ref stays null so the post-init effect below
+      // can snapshot after slider state has settled.
     }
 
     const a = investmentCase.assumptions;
@@ -216,6 +207,14 @@ export function CaseResults({ caseId }: CaseResultsProps) {
     }),
     [revenue, customers, growth, investment, grossMargin, discountRate]
   );
+
+  /* Snapshot assumptions for stale detection AFTER slider state has settled.
+     Runs once: when a DB-loaded memo exists but the ref hasn't been set yet. */
+  useEffect(() => {
+    if (memo && dbInitialized.current && memoAssumptionsRef.current === null) {
+      memoAssumptionsRef.current = JSON.stringify(assumptions);
+    }
+  }, [memo, assumptions]);
 
   /* Computed financials via engine */
   const financials = useMemo(() => computeFinancials(assumptions), [assumptions]);
@@ -879,26 +878,31 @@ export function CaseResults({ caseId }: CaseResultsProps) {
               AI-generated &middot; Review before sharing
             </p>
           </div>
-          {(wizardResult || investmentCase) && (
-            <button
-              onClick={fetchMemo}
-              disabled={memoLoading}
-              style={{
-                padding: "6px 14px",
-                borderRadius: 6,
-                border: "1px solid var(--zelis-ice, #ECE9FF)",
-                background: "#fff",
-                color: "var(--zelis-blue-purple, #5F5FC3)",
-                fontSize: 12,
-                fontWeight: 600,
-                cursor: memoLoading ? "default" : "pointer",
-                opacity: memoLoading ? 0.5 : 1,
-                whiteSpace: "nowrap",
-              }}
-            >
-              {memoLoading ? "Generating..." : "Regenerate"}
-            </button>
-          )}
+          {(() => {
+            const isMemoStale = !!(memo && memoAssumptionsRef.current && JSON.stringify(assumptions) !== memoAssumptionsRef.current);
+            // Hide header Regenerate when stale banner is showing (it has its own button)
+            if (isMemoStale) return null;
+            return (wizardResult || investmentCase) ? (
+              <button
+                onClick={fetchMemo}
+                disabled={memoLoading}
+                style={{
+                  padding: "6px 14px",
+                  borderRadius: 6,
+                  border: "1px solid var(--zelis-ice, #ECE9FF)",
+                  background: "#fff",
+                  color: "var(--zelis-blue-purple, #5F5FC3)",
+                  fontSize: 12,
+                  fontWeight: 600,
+                  cursor: memoLoading ? "default" : "pointer",
+                  opacity: memoLoading ? 0.5 : 1,
+                  whiteSpace: "nowrap",
+                }}
+              >
+                {memoLoading ? "Generating..." : "Regenerate"}
+              </button>
+            ) : null;
+          })()}
         </div>
 
         {/* Stale memo indicator */}

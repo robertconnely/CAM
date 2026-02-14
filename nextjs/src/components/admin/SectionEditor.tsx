@@ -150,14 +150,26 @@ export function SectionEditor({ sections, categories, editSectionId, editFromSlu
     }
   };
 
+  const backButtonStyle = {
+    display: "inline-flex" as const,
+    alignItems: "center" as const,
+    gap: 6,
+    padding: "7px 14px",
+    borderRadius: 8,
+    border: "1px solid var(--zelis-ice, #ECE9FF)",
+    background: "#fff",
+    color: "var(--zelis-dark, #23004B)",
+    fontSize: "0.8rem",
+    fontWeight: 600,
+    fontFamily: "inherit",
+    cursor: "pointer" as const,
+    marginBottom: "1.25rem",
+  };
+
   if (subView?.type === "content") {
     return (
       <div>
-        <button
-          className="filter-btn"
-          onClick={handleBack}
-          style={{ marginBottom: "1rem" }}
-        >
+        <button onClick={handleBack} style={backButtonStyle}>
           {backLabel}
         </button>
         <ContentBlockEditor sectionId={subView.sectionId} />
@@ -168,11 +180,7 @@ export function SectionEditor({ sections, categories, editSectionId, editFromSlu
   if (subView?.type === "toc") {
     return (
       <div>
-        <button
-          className="filter-btn"
-          onClick={handleBack}
-          style={{ marginBottom: "1rem" }}
-        >
+        <button onClick={handleBack} style={backButtonStyle}>
           {backLabel}
         </button>
         <TocEditor sectionId={subView.sectionId} />
@@ -182,74 +190,120 @@ export function SectionEditor({ sections, categories, editSectionId, editFromSlu
 
   return (
     <div>
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "1rem" }}>
-        <h2 style={{ margin: 0 }}>Sections</h2>
-        <button className="filter-btn active" onClick={handleCreate}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "1.25rem" }}>
+        <div>
+          <h2 style={{
+            margin: 0,
+            fontSize: "1.05rem",
+            fontWeight: 700,
+            color: "var(--zelis-dark, #23004B)",
+          }}>Sections</h2>
+          <p style={{
+            margin: "0.15rem 0 0",
+            fontSize: "0.78rem",
+            color: "var(--zelis-medium-gray, #888)",
+            fontWeight: 500,
+          }}>{sections.length} content sections</p>
+        </div>
+        <button
+          onClick={handleCreate}
+          style={{
+            display: "inline-flex",
+            alignItems: "center",
+            gap: 6,
+            padding: "8px 16px",
+            borderRadius: 8,
+            border: "none",
+            background: "var(--zelis-blue-purple, #5F5FC3)",
+            color: "#fff",
+            fontSize: "0.8rem",
+            fontWeight: 700,
+            fontFamily: "inherit",
+            cursor: "pointer",
+            boxShadow: "0 2px 8px rgba(95, 95, 195, 0.25)",
+          }}
+        >
           + New Section
         </button>
       </div>
 
-      <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
+      <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem" }}>
         {sections.map((section) => (
           <div
             key={section.id}
-            className="doc-item"
             style={{
-              background: "var(--zelis-light-gray)",
-              padding: "1.5rem",
-              borderRadius: "12px",
+              background: "var(--zelis-ice, #ECE9FF)",
+              padding: "1rem 1.25rem",
+              borderRadius: 10,
               display: "flex",
               justifyContent: "space-between",
               alignItems: "center",
+              transition: "box-shadow 0.15s",
             }}
           >
-            <div>
-              <span style={{ fontSize: "1.5rem", marginRight: "0.75rem" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: "0.65rem" }}>
+              <span style={{
+                fontSize: "1.25rem",
+                width: 36,
+                height: 36,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                background: "#fff",
+                borderRadius: 8,
+                flexShrink: 0,
+              }}>
                 {section.icon}
               </span>
-              <strong>{section.title}</strong>
-              <span
-                style={{
-                  marginLeft: "1rem",
-                  fontSize: "0.85rem",
-                  opacity: 0.6,
-                }}
-              >
-                /{section.slug}
-              </span>
+              <div>
+                <div style={{
+                  fontSize: "0.88rem",
+                  fontWeight: 700,
+                  color: "var(--zelis-dark, #23004B)",
+                }}>{section.title}</div>
+                <div style={{
+                  fontSize: "0.72rem",
+                  color: "var(--zelis-blue-purple, #5F5FC3)",
+                  fontWeight: 500,
+                }}>/{section.slug}</div>
+              </div>
             </div>
-            <div style={{ display: "flex", gap: "0.5rem" }}>
-              <button
-                className="filter-btn"
-                onClick={() => setSubView({ type: "content", sectionId: section.id })}
-                style={{ fontSize: "0.8rem", padding: "0.35rem 0.75rem" }}
-              >
-                Edit Content
-              </button>
-              <button
-                className="filter-btn"
-                onClick={() => setSubView({ type: "toc", sectionId: section.id })}
-                style={{ fontSize: "0.8rem", padding: "0.35rem 0.75rem" }}
-              >
-                Edit TOC
-              </button>
-              <button
-                className="filter-btn"
-                onClick={() => handleEdit(section)}
-                style={{ fontSize: "0.8rem", padding: "0.35rem 0.75rem" }}
-              >
-                Edit Section
-              </button>
+            <div style={{ display: "flex", gap: "0.4rem" }}>
+              {[
+                { label: "Content", onClick: () => setSubView({ type: "content", sectionId: section.id }) },
+                { label: "TOC", onClick: () => setSubView({ type: "toc", sectionId: section.id }) },
+                { label: "Edit", onClick: () => handleEdit(section) },
+              ].map((btn) => (
+                <button
+                  key={btn.label}
+                  onClick={btn.onClick}
+                  style={{
+                    background: "#fff",
+                    border: "none",
+                    borderRadius: 6,
+                    cursor: "pointer",
+                    padding: "0.35rem 0.7rem",
+                    fontSize: "0.75rem",
+                    fontWeight: 600,
+                    fontFamily: "inherit",
+                    color: "var(--zelis-dark, #23004B)",
+                    transition: "all 0.15s",
+                  }}
+                >
+                  {btn.label}
+                </button>
+              ))}
               <button
                 onClick={() => setDeleteTarget(section)}
                 style={{
                   background: "none",
-                  border: "1px solid var(--zelis-red)",
-                  color: "var(--zelis-red)",
-                  borderRadius: "6px",
+                  border: "1px solid var(--zelis-red, #E61E2D)",
+                  color: "var(--zelis-red, #E61E2D)",
+                  borderRadius: 6,
                   cursor: "pointer",
-                  padding: "0.35rem 0.75rem",
-                  fontSize: "0.8rem",
+                  padding: "0.35rem 0.7rem",
+                  fontSize: "0.75rem",
+                  fontWeight: 600,
                   fontFamily: "inherit",
                 }}
               >
@@ -282,21 +336,27 @@ export function SectionEditor({ sections, categories, editSectionId, editFromSlu
           <div
             style={{
               background: "white",
-              borderRadius: "12px",
+              borderRadius: 12,
               padding: "2rem",
-              maxWidth: "600px",
+              maxWidth: 600,
               width: "100%",
               maxHeight: "80vh",
               overflow: "auto",
+              boxShadow: "0px 4px 28px 9px rgba(130, 140, 225, 0.15)",
             }}
           >
-            <h3>{isCreating ? "New Section" : "Edit Section"}</h3>
+            <h3 style={{
+              margin: 0,
+              fontSize: "1.1rem",
+              fontWeight: 800,
+              color: "var(--zelis-purple, #321478)",
+            }}>{isCreating ? "New Section" : "Edit Section"}</h3>
             <div
               style={{
                 display: "flex",
                 flexDirection: "column",
                 gap: "1rem",
-                marginTop: "1rem",
+                marginTop: "1.25rem",
               }}
             >
               <label>
@@ -405,19 +465,41 @@ export function SectionEditor({ sections, categories, editSectionId, editFromSlu
                   }}
                 />
               </label>
-              <div style={{ display: "flex", gap: "0.75rem", marginTop: "0.5rem" }}>
+              <div style={{ display: "flex", gap: "0.75rem", marginTop: "0.75rem" }}>
                 <button
-                  className="filter-btn active"
                   onClick={handleSave}
                   disabled={saving}
+                  style={{
+                    padding: "8px 20px",
+                    borderRadius: 8,
+                    border: "none",
+                    background: "var(--zelis-blue-purple, #5F5FC3)",
+                    color: "#fff",
+                    fontSize: "0.82rem",
+                    fontWeight: 700,
+                    fontFamily: "inherit",
+                    cursor: saving ? "not-allowed" : "pointer",
+                    opacity: saving ? 0.6 : 1,
+                    boxShadow: "0 2px 8px rgba(95, 95, 195, 0.25)",
+                  }}
                 >
                   {saving ? "Saving..." : isCreating ? "Create" : "Save"}
                 </button>
                 <button
-                  className="filter-btn"
                   onClick={() => {
                     setEditingSection(null);
                     setIsCreating(false);
+                  }}
+                  style={{
+                    padding: "8px 20px",
+                    borderRadius: 8,
+                    border: "1px solid var(--zelis-ice, #ECE9FF)",
+                    background: "#fff",
+                    color: "var(--zelis-dark, #23004B)",
+                    fontSize: "0.82rem",
+                    fontWeight: 600,
+                    fontFamily: "inherit",
+                    cursor: "pointer",
                   }}
                 >
                   Cancel

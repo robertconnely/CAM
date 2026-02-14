@@ -340,7 +340,7 @@ export function StepResults({
             transition: "all 0.2s ease",
           }}
         >
-          {saving ? "Saving..." : "Save Score & Return to Tracker"}
+          {saving ? "Saving..." : "Save Score & View Pipeline"}
         </button>
       </div>
     </div>

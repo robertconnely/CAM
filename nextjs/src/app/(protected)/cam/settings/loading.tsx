@@ -31,7 +31,7 @@ export default function SettingsLoading() {
         style={{
           background: "#fff",
           borderRadius: 12,
-          border: "1px solid var(--zelis-ice, #ECE9FF)",
+          boxShadow: "0px 4px 28px 9px rgba(130, 140, 225, 0.07)",
           padding: 24,
         }}
       >

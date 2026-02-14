@@ -1,7 +1,9 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useAuth } from "@/components/auth/AuthProvider";
+import { createClient } from "@/lib/supabase/client";
 import type { InvestmentCase } from "@/lib/types/database";
 
 interface ScoreButtonProps {
@@ -10,12 +12,45 @@ interface ScoreButtonProps {
 
 export function ScoreButton({ investmentCase }: ScoreButtonProps) {
   const { role } = useAuth();
+  const [alreadyScored, setAlreadyScored] = useState<boolean | null>(null);
+
+  useEffect(() => {
+    if (!investmentCase) return;
+
+    const supabase = createClient();
+
+    async function checkScored() {
+      // Find bridge initiative for this case, then check for capital_scores
+      const { data: inits } = await supabase
+        .from("initiatives")
+        .select("id")
+        .eq("investment_case_id", investmentCase!.id)
+        .limit(1);
+
+      if (!inits || inits.length === 0) {
+        setAlreadyScored(false);
+        return;
+      }
+
+      const { count } = await supabase
+        .from("capital_scores")
+        .select("id", { count: "exact", head: true })
+        .eq("initiative_id", inits[0].id);
+
+      setAlreadyScored((count ?? 0) > 0);
+    }
+
+    checkScored();
+  }, [investmentCase]);
 
   if (!investmentCase) return null;
 
   // Only show for submitted cases to editors/admins
   if (investmentCase.status !== "submitted") return null;
   if (role !== "admin" && role !== "editor") return null;
+
+  // Hide while loading or if already scored
+  if (alreadyScored === null || alreadyScored) return null;
 
   return (
     <Link

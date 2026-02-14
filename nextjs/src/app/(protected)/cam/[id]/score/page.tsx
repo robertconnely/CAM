@@ -133,7 +133,7 @@ export default function ScoreCasePage({
       // Non-fatal
     }
 
-    router.push(`/cam/${caseId}`);
+    router.push('/cam/pipeline');
   };
 
   if (loading) {
