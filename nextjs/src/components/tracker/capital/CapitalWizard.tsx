@@ -208,6 +208,48 @@ export function CapitalWizard({
     });
   }, [investmentCase, preselectedInitiativeId]);
 
+  // When an initiative is selected from the list (not pre-populated from case),
+  // fetch the linked investment case to hydrate initiative type, revenue model, etc.
+  useEffect(() => {
+    if (hydratedRef.current || investmentCase || !state.selectedInitiativeId) return;
+
+    const init = initiatives.find((i) => i.id === state.selectedInitiativeId);
+    if (!init?.investment_case_id) return;
+
+    async function fetchLinkedCase(caseId: string) {
+      const { data } = await supabase
+        .from("investment_cases")
+        .select("initiative_type, revenue_model, investment_amount, timeline_months, financials")
+        .eq("id", caseId)
+        .single();
+
+      if (!data || !data.initiative_type || !data.revenue_model) return;
+
+      hydratedRef.current = true;
+
+      const irr = (data.financials as Record<string, unknown>)?.irr;
+      const cm = (data.financials as Record<string, unknown>)?.contribution_margin;
+      const irrStr = irr != null ? ((irr as number) * 100).toFixed(1) : "";
+      const cmStr = cm != null ? (cm as number).toFixed(1) : "";
+
+      computedIrr.current = irrStr;
+      computedCm.current = cmStr;
+
+      dispatch({
+        type: "HYDRATE_FROM_CASE",
+        initiativeId: state.selectedInitiativeId!,
+        initiativeType: data.initiative_type as InitiativeType,
+        revenueModel: data.revenue_model as RevenueModel,
+        investmentAmount: data.investment_amount?.toString() ?? "",
+        timelineMonths: data.timeline_months?.toString() ?? "",
+        irrValue: irrStr,
+        cmValue: cmStr,
+      });
+    }
+
+    fetchLinkedCase(init.investment_case_id);
+  }, [state.selectedInitiativeId, initiatives, investmentCase, supabase]);
+
   const selectedInitiative = useMemo(
     () => initiatives.find((i) => i.id === state.selectedInitiativeId) ?? null,
     [initiatives, state.selectedInitiativeId]
