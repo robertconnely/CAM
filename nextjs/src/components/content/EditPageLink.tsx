@@ -15,7 +15,7 @@ export function EditPageLink({ sectionId, slug }: EditPageLinkProps) {
 
   return (
     <Link
-      href={`/admin?section=${sectionId}&from=${slug}`}
+      href={`/cam/settings?section=${sectionId}&from=${slug}`}
       style={{
         display: "inline-flex",
         alignItems: "center",

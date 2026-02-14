@@ -22,6 +22,10 @@ export default async function RoicPage() {
       .order("scored_at", { ascending: false }),
   ]);
 
+  if (initiativesRes.error || capitalScoresRes.error) {
+    throw new Error("Failed to load ROIC data. Please try again.");
+  }
+
   const initiatives = (initiativesRes.data ?? []) as Initiative[];
   const capitalScores = (capitalScoresRes.data ?? []) as CapitalScore[];
 

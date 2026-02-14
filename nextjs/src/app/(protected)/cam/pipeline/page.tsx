@@ -25,6 +25,10 @@ export default async function PipelinePage() {
       .order("scored_at", { ascending: false }),
   ]);
 
+  if (initiativesRes.error || phasesRes.error || capitalScoresRes.error) {
+    throw new Error("Failed to load pipeline data. Please try again.");
+  }
+
   const initiatives = (initiativesRes.data ?? []) as Initiative[];
   const phases = (phasesRes.data ?? []) as PdlcPhase[];
   const capitalScores = (capitalScoresRes.data ?? []) as CapitalScore[];

@@ -21,7 +21,7 @@ export default async function PortfolioPage() {
     .order("annual_recurring_revenue", { ascending: false, nullsFirst: false });
 
   if (error) {
-    console.error("Portfolio fetch error:", error);
+    throw new Error("Failed to load portfolio data. Please try again.");
   }
 
   const products = (data ?? []) as PortfolioProduct[];

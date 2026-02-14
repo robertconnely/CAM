@@ -25,6 +25,12 @@ interface AdminDashboardProps {
 
 type Tab = "sections" | "documents" | "users";
 
+const tabMeta: { key: Tab; label: string; icon: string; adminOnly?: boolean }[] = [
+  { key: "sections", label: "Content", icon: "◉" },
+  { key: "documents", label: "Documents", icon: "⊡" },
+  { key: "users", label: "Users", icon: "◎", adminOnly: true },
+];
+
 export function AdminDashboard({
   sections,
   categories,
@@ -36,44 +42,102 @@ export function AdminDashboard({
 }: AdminDashboardProps) {
   const [activeTab, setActiveTab] = useState<Tab>("sections");
 
-  const tabs: { key: Tab; label: string; adminOnly?: boolean }[] = [
-    { key: "sections", label: "Sections & Content" },
-    { key: "documents", label: "Documents" },
-    { key: "users", label: "Users", adminOnly: true },
-  ];
-
   return (
     <ToastProvider>
-      <main className="site-main">
-        <h1>Admin Dashboard</h1>
-        <p className="opacity-75" style={{ marginBottom: "2rem" }}>
-          Manage content, documents, and users.
-        </p>
-
-        <div className="filters" style={{ marginBottom: "2rem" }}>
-          {tabs
-            .filter((tab) => !tab.adminOnly || userRole === "admin")
-            .map((tab) => (
-              <button
-                key={tab.key}
-                className={`filter-btn ${activeTab === tab.key ? "active" : ""}`}
-                onClick={() => setActiveTab(tab.key)}
-              >
-                {tab.label}
-              </button>
-            ))}
+      <div style={{ padding: "2rem 2.5rem", maxWidth: 1120 }}>
+        {/* Header */}
+        <div style={{ marginBottom: "1.5rem" }}>
+          <h1
+            style={{
+              margin: 0,
+              fontSize: "1.5rem",
+              fontWeight: 800,
+              color: "var(--zelis-purple, #321478)",
+            }}
+          >
+            Settings
+          </h1>
+          <p
+            style={{
+              margin: "0.25rem 0 0",
+              fontSize: "0.85rem",
+              color: "var(--zelis-medium-gray, #888)",
+              fontWeight: 500,
+            }}
+          >
+            Manage content, documents, and users
+          </p>
         </div>
 
-        {activeTab === "sections" && (
-          <SectionEditor sections={sections} categories={categories} editSectionId={editSectionId} editFromSlug={editFromSlug} />
-        )}
-        {activeTab === "documents" && (
-          <DocumentUploader documents={documents} sections={sections} />
-        )}
-        {activeTab === "users" && userRole === "admin" && (
-          <UserManager profiles={profiles} />
-        )}
-      </main>
+        {/* Tab pills */}
+        <div style={{ display: "flex", gap: 8, marginBottom: 24 }}>
+          {tabMeta
+            .filter((tab) => !tab.adminOnly || userRole === "admin")
+            .map((tab) => {
+              const active = activeTab === tab.key;
+              return (
+                <button
+                  key={tab.key}
+                  onClick={() => setActiveTab(tab.key)}
+                  style={{
+                    display: "inline-flex",
+                    alignItems: "center",
+                    gap: 6,
+                    padding: "8px 18px",
+                    borderRadius: 8,
+                    border: active
+                      ? "1px solid var(--zelis-blue-purple, #5F5FC3)"
+                      : "1px solid var(--zelis-ice, #ECE9FF)",
+                    background: active
+                      ? "rgba(95,95,195,0.1)"
+                      : "#fff",
+                    color: active
+                      ? "var(--zelis-blue-purple, #5F5FC3)"
+                      : "var(--zelis-dark, #23004B)",
+                    fontSize: 13,
+                    fontWeight: active ? 700 : 500,
+                    fontFamily: "inherit",
+                    cursor: "pointer",
+                    transition: "all 0.15s",
+                    boxShadow: active
+                      ? "none"
+                      : "0 1px 3px rgba(0,0,0,0.04), 0 1px 2px rgba(0,0,0,0.02)",
+                  }}
+                >
+                  <span style={{ fontSize: 14 }}>{tab.icon}</span>
+                  {tab.label}
+                </button>
+              );
+            })}
+        </div>
+
+        {/* Tab content */}
+        <div
+          style={{
+            background: "#fff",
+            borderRadius: 12,
+            border: "1px solid var(--zelis-ice, #ECE9FF)",
+            boxShadow:
+              "0 1px 3px rgba(0,0,0,0.04), 0 1px 2px rgba(0,0,0,0.02)",
+            padding: 24,
+          }}
+        >
+          {activeTab === "sections" && (
+            <SectionEditor
+              sections={sections}
+              categories={categories}
+              editSectionId={editSectionId}
+              editFromSlug={editFromSlug}
+            />
+          )}
+          {activeTab === "documents" && (
+            <DocumentUploader documents={documents} sections={sections} />
+          )}
+          {activeTab === "users" && userRole === "admin" && (
+            <UserManager profiles={profiles} />
+          )}
+        </div>
+      </div>
     </ToastProvider>
   );
 }

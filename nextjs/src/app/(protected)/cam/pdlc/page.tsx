@@ -64,10 +64,14 @@ const GOVERNANCE_TIERS = [
 export default async function PdlcFrameworkPage() {
   const supabase = await createClient();
 
-  const { data: phasesData } = await supabase
+  const { data: phasesData, error } = await supabase
     .from("pdlc_phases")
     .select("*")
     .order("display_order", { ascending: true });
+
+  if (error) {
+    throw new Error("Failed to load PDLC framework data. Please try again.");
+  }
 
   const phases = (phasesData ?? []) as PdlcPhase[];
 

@@ -95,8 +95,8 @@ export function Footer({ prevPage, nextPage, relatedSections }: FooterProps) {
                 {user.email}
               </span>
               {(role === "admin" || role === "editor") && (
-                <Link href="/admin" style={footerBtnStyle}>
-                  Admin
+                <Link href="/cam/settings" style={footerBtnStyle}>
+                  Settings
                 </Link>
               )}
               <button

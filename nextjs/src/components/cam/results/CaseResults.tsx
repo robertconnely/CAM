@@ -132,6 +132,9 @@ export function CaseResults({ caseId }: CaseResultsProps) {
   /* Track whether DB case has been initialized into slider state */
   const dbInitialized = useRef(false);
 
+  /* Track assumptions used for last memo generation (stale detection) */
+  const memoAssumptionsRef = useRef<string | null>(null);
+
   /* Load from DB case when available */
   useEffect(() => {
     if (!investmentCase || dbInitialized.current) return;
@@ -142,6 +145,17 @@ export function CaseResults({ caseId }: CaseResultsProps) {
 
     if (investmentCase.memo_content) {
       setMemo(investmentCase.memo_content);
+      // Snapshot DB assumptions so stale detection works from initial load
+      const a = investmentCase.assumptions;
+      memoAssumptionsRef.current = JSON.stringify({
+        ...DEFAULT_ASSUMPTIONS,
+        monthly_price: a.monthly_price ?? DEFAULT_ASSUMPTIONS.monthly_price,
+        year1_customers: a.year1_customers ?? DEFAULT_ASSUMPTIONS.year1_customers,
+        revenue_growth_pct: a.revenue_growth_pct ?? DEFAULT_ASSUMPTIONS.revenue_growth_pct,
+        investment_amount: a.investment_amount ?? DEFAULT_ASSUMPTIONS.investment_amount,
+        gross_margin_pct: a.gross_margin_pct ?? DEFAULT_ASSUMPTIONS.gross_margin_pct,
+        discount_rate: a.discount_rate ?? DEFAULT_ASSUMPTIONS.discount_rate,
+      });
     }
 
     const a = investmentCase.assumptions;
@@ -284,6 +298,8 @@ export function CaseResults({ caseId }: CaseResultsProps) {
       if (!res.ok) throw new Error("Failed to generate memo");
       const data = await res.json();
       setMemo(data.memo);
+      // Snapshot current assumptions so we can detect staleness
+      memoAssumptionsRef.current = JSON.stringify(assumptions);
       // Save memo to DB if case is persisted
       if (caseId) {
         updateCase(caseId, { memo_content: data.memo });
@@ -446,21 +462,6 @@ export function CaseResults({ caseId }: CaseResultsProps) {
               Edit Case
             </Link>
           )}
-          <button
-            style={{
-              padding: "9px 18px",
-              borderRadius: 8,
-              border: "1px solid var(--zelis-ice, #ECE9FF)",
-              background: "#fff",
-              color: "var(--zelis-dark, #23004B)",
-              fontSize: 13,
-              fontWeight: 600,
-              cursor: "pointer",
-              whiteSpace: "nowrap",
-            }}
-          >
-            Export PDF
-          </button>
           {caseId && <ScoreButton investmentCase={investmentCase} />}
           {caseId ? (
             <SubmitButton
@@ -899,6 +900,53 @@ export function CaseResults({ caseId }: CaseResultsProps) {
             </button>
           )}
         </div>
+
+        {/* Stale memo indicator */}
+        {memo && memoAssumptionsRef.current && JSON.stringify(assumptions) !== memoAssumptionsRef.current && (
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: 10,
+              padding: "10px 14px",
+              borderRadius: 8,
+              background: "rgba(255, 190, 0, 0.08)",
+              border: "1px solid rgba(255, 190, 0, 0.25)",
+              marginBottom: 12,
+            }}
+          >
+            <span style={{ fontSize: 15 }}>&#9888;</span>
+            <span
+              style={{
+                flex: 1,
+                fontSize: 12,
+                color: "var(--zelis-dark, #23004B)",
+                fontWeight: 500,
+              }}
+            >
+              Assumptions have changed since this memo was generated.
+            </span>
+            <button
+              onClick={fetchMemo}
+              disabled={memoLoading}
+              style={{
+                padding: "5px 12px",
+                borderRadius: 6,
+                border: "none",
+                background: "var(--zelis-gold, #FFBE00)",
+                color: "var(--zelis-dark, #23004B)",
+                fontSize: 12,
+                fontWeight: 700,
+                cursor: memoLoading ? "default" : "pointer",
+                opacity: memoLoading ? 0.6 : 1,
+                whiteSpace: "nowrap",
+                fontFamily: "inherit",
+              }}
+            >
+              {memoLoading ? "Regenerating..." : "Regenerate"}
+            </button>
+          </div>
+        )}
 
         {/* Memo content */}
         {memoLoading && !memo && (

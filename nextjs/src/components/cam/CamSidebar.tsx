@@ -3,6 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { NotificationBell } from "@/components/cam/notifications/NotificationBell";
+import { useAuth } from "@/components/auth/AuthProvider";
 
 interface NavItem {
   label: string;
@@ -28,6 +29,11 @@ interface CamSidebarProps {
 }
 
 export function CamSidebar({ currentPath }: CamSidebarProps) {
+  const { user, signOut } = useAuth();
+
+  const userInitial = user?.email ? user.email[0].toUpperCase() : "?";
+  const userName = user?.email ? user.email.split("@")[0] : "Guest";
+
   return (
     <aside
       style={{
@@ -225,37 +231,97 @@ export function CamSidebar({ currentPath }: CamSidebarProps) {
           gap: 10,
         }}
       >
-        <div
+        <Link
+          href="/cam/settings"
           style={{
-            width: 32,
-            height: 32,
-            borderRadius: "50%",
-            background: "var(--zelis-purple, #321478)",
             display: "flex",
             alignItems: "center",
-            justifyContent: "center",
-            fontSize: 13,
-            fontWeight: 700,
-            color: "#fff",
-            flexShrink: 0,
+            gap: 10,
+            flex: 1,
+            minWidth: 0,
+            textDecoration: "none",
+            color: "inherit",
+            borderRadius: 6,
+            transition: "opacity 0.15s",
           }}
+          title="Settings"
+          onMouseEnter={(e) => { e.currentTarget.style.opacity = "0.8"; }}
+          onMouseLeave={(e) => { e.currentTarget.style.opacity = "1"; }}
         >
-          R
-        </div>
-        <div>
-          <div style={{ fontSize: 13, fontWeight: 600, lineHeight: 1.3 }}>
-            Rob
-          </div>
           <div
             style={{
-              fontSize: 11,
-              color: "rgba(255,255,255,0.4)",
-              fontWeight: 400,
+              width: 32,
+              height: 32,
+              borderRadius: "50%",
+              background: "var(--zelis-purple, #321478)",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              fontSize: 13,
+              fontWeight: 700,
+              color: "#fff",
+              flexShrink: 0,
             }}
           >
-            SVP Operations
+            {userInitial}
           </div>
-        </div>
+          <div style={{ flex: 1, minWidth: 0 }}>
+            <div style={{ fontSize: 13, fontWeight: 600, lineHeight: 1.3 }}>
+              {userName}
+            </div>
+            <div
+              style={{
+                fontSize: 11,
+                color: "rgba(255,255,255,0.4)",
+                fontWeight: 400,
+                overflow: "hidden",
+                textOverflow: "ellipsis",
+                whiteSpace: "nowrap",
+              }}
+            >
+              {user?.email ?? "Not signed in"}
+            </div>
+          </div>
+        </Link>
+        {user && (
+          <button
+            onClick={signOut}
+            title="Sign out"
+            style={{
+              background: "none",
+              border: "none",
+              color: "rgba(255,255,255,0.4)",
+              cursor: "pointer",
+              padding: 4,
+              borderRadius: 4,
+              fontSize: 16,
+              lineHeight: 1,
+              flexShrink: 0,
+              transition: "color 0.15s",
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.color = "rgba(255,255,255,0.8)";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.color = "rgba(255,255,255,0.4)";
+            }}
+          >
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+              <polyline points="16 17 21 12 16 7" />
+              <line x1="21" y1="12" x2="9" y2="12" />
+            </svg>
+          </button>
+        )}
       </div>
     </aside>
   );
