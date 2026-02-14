@@ -81,7 +81,61 @@ export function PortfolioKpiCards({ products }: PortfolioKpiCardsProps) {
       ? (shareValues.reduce((a, b) => a + b, 0) / shareValues.length).toFixed(1)
       : "—";
 
+  // --- Portfolio Health: composite score (0-100) ---
+  let healthScore = 0;
+  if (total > 0) {
+    // 1. Stage health (30%): % of products in Growth or Maturity
+    const healthyStages = products.filter(
+      (p) => p.plc_stage === "growth" || p.plc_stage === "maturity"
+    ).length;
+    const stageScore = (healthyStages / total) * 100;
+
+    // 2. Retention health (25%): map avg retention to 0-100
+    const avgRet =
+      retentionValues.length > 0
+        ? retentionValues.reduce((a, b) => a + b, 0) / retentionValues.length
+        : 0;
+    const retentionScore = Math.min(100, Math.max(0, ((avgRet - 80) / 15) * 100));
+
+    // 3. NPS health (15%): map avg NPS to 0-100 (0→0, 50+→100)
+    const avgNpsNum =
+      npsValues.length > 0
+        ? npsValues.reduce((a, b) => a + b, 0) / npsValues.length
+        : 0;
+    const npsScore = Math.min(100, Math.max(0, (avgNpsNum / 50) * 100));
+
+    // 4. Growth health (15%): map avg growth to 0-100 (-5%→0, 10%+→100)
+    const avgGrowthNum =
+      growthRates.length > 0
+        ? growthRates.reduce((a, b) => a + b, 0) / growthRates.length
+        : 0;
+    const growthScore = Math.min(100, Math.max(0, ((avgGrowthNum + 5) / 15) * 100));
+
+    // 5. LTV/CAC health (15%): map avg ratio to 0-100 (1x→0, 3x+→100)
+    const avgLtvCacNum =
+      ltvCacRatios.length > 0
+        ? ltvCacRatios.reduce((a, b) => a + b, 0) / ltvCacRatios.length
+        : 0;
+    const ltvCacScore = Math.min(100, Math.max(0, ((avgLtvCacNum - 1) / 2) * 100));
+
+    healthScore = Math.round(
+      stageScore * 0.3 +
+        retentionScore * 0.25 +
+        npsScore * 0.15 +
+        growthScore * 0.15 +
+        ltvCacScore * 0.15
+    );
+  }
+
+  const healthAccent =
+    healthScore >= 70 ? "#320FFF" : healthScore >= 40 ? "#FFBE00" : "#E61E2D";
+
   const stats: StatCard[] = [
+    {
+      label: "Portfolio Health",
+      value: total > 0 ? `${healthScore}%` : "—",
+      accent: healthAccent,
+    },
     {
       label: "Total Products",
       value: String(total),
@@ -128,7 +182,7 @@ export function PortfolioKpiCards({ products }: PortfolioKpiCardsProps) {
     <div
       style={{
         display: "grid",
-        gridTemplateColumns: "repeat(4, 1fr)",
+        gridTemplateColumns: "repeat(3, 1fr)",
         gap: 16,
       }}
     >
@@ -136,9 +190,9 @@ export function PortfolioKpiCards({ products }: PortfolioKpiCardsProps) {
         <div
           key={s.label}
           style={{
-            background: "#fff",
+            background: s.accent === "#E61E2D" ? "rgba(230, 30, 45, 0.04)" : "#fff",
             borderRadius: 10,
-            border: "1px solid var(--zelis-ice, #ECE9FF)",
+            border: s.accent === "#E61E2D" ? "1px solid rgba(230, 30, 45, 0.15)" : "1px solid var(--zelis-ice, #ECE9FF)",
             boxShadow:
               "0 1px 3px rgba(0,0,0,0.04), 0 1px 2px rgba(0,0,0,0.02)",
             padding: "16px 20px",

@@ -41,4 +41,8 @@ export const GLOSSARY: Record<string, string> = {
   PDLC: "Product Development Life Cycle — the 8-phase framework governing how products move from idea to launch: Ideation, Business Validation, Requirements, Design & Dev, Marketing Strategy, UAT/QA, Launch, Optimize & Support.",
   PLC: "Product Life Cycle — tracks live products through four stages after PDLC graduation: Introduction (market entry), Growth (scaling), Maturity (market leadership), and Decline (sunset planning).",
   CAM: "Capital Allocation Manager — the decision framework for evaluating and prioritizing product investments using financial modeling (NPV, IRR) and multi-dimensional scoring.",
+  "Portfolio Health":
+    "A composite score (0-100%) measuring overall portfolio vitality. Weighted across five dimensions: stage distribution (30% — products in Growth/Maturity are healthiest), retention rate (25%), NPS (15%), revenue growth (15%), and LTV/CAC ratio (15%). Above 70% is strong; below 40% signals portfolio-level risk.",
+  "Pipeline Health":
+    "A weighted score (0-100%) reflecting the status mix of all PDLC initiatives. On Track scores 100, Complete scores 90, At Risk scores 40, and Blocked scores 0. Above 70% means the pipeline is healthy; below 40% signals systemic execution risk.",
 };

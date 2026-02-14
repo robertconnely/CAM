@@ -1,6 +1,8 @@
 "use client";
 
 import type { Initiative, CapitalScore } from "@/lib/types/database";
+import { InfoTooltip } from "@/components/ui/InfoTooltip";
+import { GLOSSARY } from "@/lib/glossary";
 
 interface KpiStatsBarProps {
   initiatives: Initiative[];
@@ -53,11 +55,13 @@ export function KpiStatsBar({ initiatives, capitalScores }: KpiStatsBarProps) {
 
   const stats: StatCard[] = [
     {
-      label: "Portfolio Health",
+      label: "Pipeline Health",
       value: total > 0 ? `${healthScore}%` : "—",
-      color: healthScore >= 70 ? "#2e7d32" : healthScore >= 40 ? "#e67e00" : "#c62828",
-      bg: "linear-gradient(135deg, #f5f3ff 0%, #ECE9FF 100%)",
-      borderColor: "#321478",
+      color: healthScore >= 70 ? "#320FFF" : healthScore >= 40 ? "#FFBE00" : "#E61E2D",
+      bg: healthScore < 40
+        ? "linear-gradient(135deg, rgba(230,30,45,0.05) 0%, rgba(230,30,45,0.03) 100%)"
+        : "linear-gradient(135deg, #f5f3ff 0%, #ECE9FF 100%)",
+      borderColor: healthScore < 40 ? "#E61E2D" : "#321478",
     },
     {
       label: "Initiatives",
@@ -138,7 +142,11 @@ export function KpiStatsBar({ initiatives, capitalScores }: KpiStatsBarProps) {
               letterSpacing: "0.05em",
             }}
           >
-            {s.label}
+            {GLOSSARY[s.label] ? (
+              <InfoTooltip text={GLOSSARY[s.label]}>{s.label}</InfoTooltip>
+            ) : (
+              s.label
+            )}
           </div>
         </div>
       ))}

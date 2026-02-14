@@ -47,8 +47,43 @@ function MetricItem({ label, value }: { label: string; value: string }) {
   );
 }
 
+function getProductHealth(p: PortfolioProduct): number {
+  // Stage: decline is worst, growth/maturity healthiest
+  const stageScores: Record<string, number> = {
+    growth: 100,
+    maturity: 80,
+    introduction: 50,
+    decline: 10,
+  };
+  const stageScore = stageScores[p.plc_stage] ?? 50;
+
+  // Growth: -5% → 0, 10%+ → 100
+  const growthScore =
+    p.revenue_growth_rate != null
+      ? Math.min(100, Math.max(0, ((p.revenue_growth_rate + 5) / 15) * 100))
+      : 50;
+
+  // Retention: 80% → 0, 95%+ → 100
+  const retentionScore =
+    p.retention_rate != null
+      ? Math.min(100, Math.max(0, ((p.retention_rate - 80) / 15) * 100))
+      : 50;
+
+  // NPS: 0 → 0, 50+ → 100
+  const npsScore =
+    p.net_promoter_score != null
+      ? Math.min(100, Math.max(0, (p.net_promoter_score / 50) * 100))
+      : 50;
+
+  return Math.round(
+    stageScore * 0.3 + growthScore * 0.25 + retentionScore * 0.25 + npsScore * 0.2
+  );
+}
+
 function ProductCard({ product }: { product: PortfolioProduct }) {
   const cfg = PLC_STAGE_CONFIG[product.plc_stage];
+  const health = getProductHealth(product);
+  const isUnhealthy = health < 40;
 
   const ltvCac =
     product.avg_customer_ltv != null &&
@@ -60,10 +95,12 @@ function ProductCard({ product }: { product: PortfolioProduct }) {
   return (
     <div
       style={{
-        background: "#fff",
+        background: isUnhealthy ? "rgba(230, 30, 45, 0.04)" : "#fff",
         borderRadius: 10,
-        border: "1px solid var(--zelis-ice, #ECE9FF)",
-        borderLeft: `4px solid ${cfg.color}`,
+        border: isUnhealthy
+          ? "1px solid rgba(230, 30, 45, 0.15)"
+          : "1px solid var(--zelis-ice, #ECE9FF)",
+        borderLeft: `4px solid ${isUnhealthy ? "#E61E2D" : cfg.color}`,
         boxShadow: "0 1px 3px rgba(0,0,0,0.04), 0 1px 2px rgba(0,0,0,0.02)",
         padding: "20px 24px",
         display: "flex",

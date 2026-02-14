@@ -1,6 +1,8 @@
 "use client";
 
 import type { Initiative, CapitalScore } from "@/lib/types/database";
+import { InfoTooltip } from "@/components/ui/InfoTooltip";
+import { GLOSSARY } from "@/lib/glossary";
 
 interface PipelineKpiCardsProps {
   initiatives: Initiative[];
@@ -40,7 +42,7 @@ export function PipelineKpiCards({ initiatives, capitalScores }: PipelineKpiCard
 
   const stats: StatCard[] = [
     {
-      label: "Portfolio Health",
+      label: "Pipeline Health",
       value: total > 0 ? `${healthScore}%` : "—",
       accent: healthScore >= 70 ? "#320FFF" : healthScore >= 40 ? "#FFBE00" : "#E61E2D",
     },
@@ -83,9 +85,9 @@ export function PipelineKpiCards({ initiatives, capitalScores }: PipelineKpiCard
         <div
           key={s.label}
           style={{
-            background: "#fff",
+            background: s.accent === "#E61E2D" ? "rgba(230, 30, 45, 0.04)" : "#fff",
             borderRadius: 10,
-            border: "1px solid var(--zelis-ice, #ECE9FF)",
+            border: s.accent === "#E61E2D" ? "1px solid rgba(230, 30, 45, 0.15)" : "1px solid var(--zelis-ice, #ECE9FF)",
             boxShadow: "0 1px 3px rgba(0,0,0,0.04), 0 1px 2px rgba(0,0,0,0.02)",
             padding: "16px 20px",
             display: "flex",
@@ -103,7 +105,11 @@ export function PipelineKpiCards({ initiatives, capitalScores }: PipelineKpiCard
               lineHeight: 1.2,
             }}
           >
-            {s.label}
+            {GLOSSARY[s.label] ? (
+              <InfoTooltip text={GLOSSARY[s.label]}>{s.label}</InfoTooltip>
+            ) : (
+              s.label
+            )}
           </span>
           <span
             style={{
