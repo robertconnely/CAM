@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useAuth } from "@/components/auth/AuthProvider";
 import { submitForApproval } from "@/lib/cam/submit-for-approval";
+import { CelebrationModal } from "./CelebrationModal";
 import type { InvestmentCase } from "@/lib/types/database";
 
 interface SubmitButtonProps {
@@ -15,6 +16,7 @@ export function SubmitButton({ investmentCase, onSubmitted }: SubmitButtonProps)
   const [confirming, setConfirming] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [showCelebration, setShowCelebration] = useState(false);
 
   if (!investmentCase) return null;
 
@@ -23,7 +25,7 @@ export function SubmitButton({ investmentCase, onSubmitted }: SubmitButtonProps)
   const isRejected = investmentCase.status === "rejected";
 
   // Already submitted or beyond
-  if (isSubmitted) {
+  if (isSubmitted && !showCelebration) {
     return (
       <button
         disabled
@@ -52,8 +54,8 @@ export function SubmitButton({ investmentCase, onSubmitted }: SubmitButtonProps)
           padding: "9px 18px",
           borderRadius: 8,
           border: "none",
-          background: "rgba(16, 185, 129, 0.1)",
-          color: "#059669",
+          background: "rgba(50, 15, 255, 0.08)",
+          color: "var(--zelis-blue, #320FFF)",
           fontSize: 13,
           fontWeight: 600,
           cursor: "default",
@@ -94,11 +96,41 @@ export function SubmitButton({ investmentCase, onSubmitted }: SubmitButtonProps)
     setSubmitting(false);
     if (result.success) {
       setConfirming(false);
-      onSubmitted?.();
+      setShowCelebration(true);
     } else {
       setError(result.error ?? "Failed to submit");
     }
   };
+
+  // Celebration modal after successful submission
+  if (showCelebration) {
+    return (
+      <CelebrationModal
+        open
+        variant="submitted"
+        title="Case Submitted for Approval"
+        subtitle="A bridge initiative has been created in the PDLC Pipeline. Reviewers have been notified."
+        actions={[
+          {
+            label: "Stay on Case",
+            onClick: () => {
+              setShowCelebration(false);
+              onSubmitted?.();
+            },
+          },
+          {
+            label: "View Pipeline",
+            href: "/cam/pipeline",
+            primary: true,
+          },
+        ]}
+        onClose={() => {
+          setShowCelebration(false);
+          onSubmitted?.();
+        }}
+      />
+    );
+  }
 
   // Confirmation dialog
   if (confirming) {

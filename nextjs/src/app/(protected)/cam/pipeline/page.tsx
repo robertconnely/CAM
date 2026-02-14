@@ -1,6 +1,7 @@
 import { createClient } from "@/lib/supabase/server";
 import { PipelineKanban } from "@/components/dashboard/PipelineKanban";
 import { PipelineKpiCards } from "@/components/dashboard/PipelineKpiCards";
+import { InitiativeViewToggle } from "@/components/dashboard/InitiativeViewToggle";
 import type { Initiative, PdlcPhase, CapitalScore } from "@/lib/types/database";
 
 export const metadata = {
@@ -57,6 +58,8 @@ export default async function PipelinePage() {
           Portfolio health and initiatives by PDLC phase
         </p>
       </div>
+
+      <InitiativeViewToggle active="pipeline" />
 
       {/* KPI Dashboard Cards */}
       <div style={{ marginBottom: "1.5rem" }}>

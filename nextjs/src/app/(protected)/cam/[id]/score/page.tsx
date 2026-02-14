@@ -6,8 +6,16 @@ import { createClient } from "@/lib/supabase/client";
 import { useAuth } from "@/components/auth/AuthProvider";
 import { CapitalWizard } from "@/components/tracker/capital/CapitalWizard";
 import { ToastProvider } from "@/components/admin/Toast";
+import { CelebrationModal } from "@/components/cam/workflow/CelebrationModal";
 import { updateCaseFromScoring } from "@/lib/cam/case-service";
 import type { Initiative, PdlcPhase, InvestmentCase } from "@/lib/types/database";
+
+const RECOMMENDATION_LABELS: Record<string, { label: string; color: string; bg: string }> = {
+  strong_go: { label: "Strong Go", color: "#320FFF", bg: "rgba(50, 15, 255, 0.1)" },
+  go: { label: "Go", color: "#320FFF", bg: "rgba(50, 15, 255, 0.08)" },
+  consider: { label: "Consider", color: "#D97706", bg: "rgba(255, 190, 0, 0.12)" },
+  hold: { label: "Hold", color: "#E61E2D", bg: "rgba(230, 30, 45, 0.08)" },
+};
 
 export default function ScoreCasePage({
   params,
@@ -23,6 +31,10 @@ export default function ScoreCasePage({
   const [investmentCase, setInvestmentCase] = useState<InvestmentCase | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [scoringResult, setScoringResult] = useState<{
+    recommendation: string;
+    show: boolean;
+  } | null>(null);
 
   useEffect(() => {
     const supabase = createClient();
@@ -133,8 +145,46 @@ export default function ScoreCasePage({
       // Non-fatal
     }
 
-    router.push('/cam/pipeline');
+    // Show celebration modal instead of redirecting
+    setScoringResult({ recommendation, show: true });
   };
+
+  // Celebration modal for scoring result
+  if (scoringResult?.show) {
+    const rec = scoringResult.recommendation;
+    const isApproved = rec === "strong_go" || rec === "go";
+    const recLabel = RECOMMENDATION_LABELS[rec] ?? RECOMMENDATION_LABELS.consider;
+
+    const variant = isApproved ? "approved" as const : rec === "hold" ? "hold" as const : "consider" as const;
+    const title = isApproved ? "Case Approved" : `Case Scored: ${recLabel.label}`;
+    const subtitle = isApproved
+      ? "This case has been approved and moved to the execution stage. The initiative is active in the pipeline."
+      : rec === "hold"
+        ? "This case has been placed on hold. Review the scoring details and consider revising the business case."
+        : "This case requires further review. The case remains in the approval stage.";
+
+    const actions = isApproved
+      ? [
+          { label: "Back to Case", href: `/cam/${caseId}` },
+          { label: "View Pipeline", href: "/cam/pipeline", primary: true },
+        ]
+      : [
+          ...(rec !== "hold" ? [{ label: "View Pipeline", href: "/cam/pipeline" }] : []),
+          { label: "Back to Case", href: `/cam/${caseId}`, primary: true },
+        ];
+
+    return (
+      <CelebrationModal
+        open
+        variant={variant}
+        title={title}
+        subtitle={subtitle}
+        badge={recLabel}
+        actions={actions}
+        onClose={() => router.push(`/cam/${caseId}`)}
+      />
+    );
+  }
 
   if (loading) {
     return (
