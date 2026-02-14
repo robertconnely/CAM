@@ -150,6 +150,7 @@ export function CaseResults({ caseId }: CaseResultsProps) {
 
   /* Track assumptions used for last memo generation (stale detection) */
   const memoAssumptionsRef = useRef<string | null>(null);
+  const memoFromDb = useRef(false); // true when memo was loaded from a saved case
 
   /* Load from DB case when available */
   useEffect(() => {
@@ -161,6 +162,7 @@ export function CaseResults({ caseId }: CaseResultsProps) {
 
     if (investmentCase.memo_content) {
       setMemo(investmentCase.memo_content);
+      memoFromDb.current = true;
       // Don't snapshot here — ref stays null so the post-init effect below
       // can snapshot after slider state has settled.
     }
@@ -960,22 +962,36 @@ export function CaseResults({ caseId }: CaseResultsProps) {
               gap: 10,
               padding: "10px 14px",
               borderRadius: 8,
-              background: "rgba(255, 190, 0, 0.08)",
-              border: "1px solid rgba(255, 190, 0, 0.25)",
+              background: memoFromDb.current ? "rgba(255, 190, 0, 0.08)" : "rgba(95, 95, 195, 0.06)",
+              border: memoFromDb.current ? "1px solid rgba(255, 190, 0, 0.25)" : "1px solid rgba(95, 95, 195, 0.15)",
               marginBottom: 12,
             }}
           >
-            <span style={{ fontSize: 15 }}>&#9888;</span>
-            <span
-              style={{
-                flex: 1,
-                fontSize: 12,
-                color: "var(--zelis-dark, #23004B)",
-                fontWeight: 500,
-              }}
-            >
-              Assumptions have changed since this memo was generated.
-            </span>
+            {memoFromDb.current && <span style={{ fontSize: 15 }}>&#9888;</span>}
+            {memoFromDb.current && (
+              <span
+                style={{
+                  flex: 1,
+                  fontSize: 12,
+                  color: "var(--zelis-dark, #23004B)",
+                  fontWeight: 500,
+                }}
+              >
+                Assumptions have changed since this memo was generated.
+              </span>
+            )}
+            {!memoFromDb.current && (
+              <span
+                style={{
+                  flex: 1,
+                  fontSize: 12,
+                  color: "var(--zelis-dark-gray, #555)",
+                  fontWeight: 500,
+                }}
+              >
+                Regenerate the memo to reflect your current assumptions.
+              </span>
+            )}
             <button
               onClick={fetchMemo}
               disabled={memoLoading}
@@ -983,8 +999,8 @@ export function CaseResults({ caseId }: CaseResultsProps) {
                 padding: "5px 12px",
                 borderRadius: 6,
                 border: "none",
-                background: "var(--zelis-gold, #FFBE00)",
-                color: "var(--zelis-dark, #23004B)",
+                background: memoFromDb.current ? "var(--zelis-gold, #FFBE00)" : "var(--zelis-blue-purple, #5F5FC3)",
+                color: memoFromDb.current ? "var(--zelis-dark, #23004B)" : "#fff",
                 fontSize: 12,
                 fontWeight: 700,
                 cursor: memoLoading ? "default" : "pointer",
